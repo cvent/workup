@@ -17,6 +17,8 @@ $WORKUP_BINS = Join-Path ${WORKUP_DIR} 'bin'
 $CHEFDK_URL = 'https://omnitruck.chef.io/install.ps1'
 $CHEFDK_VERSION = '0.15.15'
 
+$wc = New-Object System.Net.WebClient
+
 Write-Host -NoNewLine "Checking for ChefDK >= v${CHEFDK_VERSION}... "
 If (Get-Command chef -ErrorAction SilentlyContinue) {
   $current_chef_version = (chef --version | select -first 1) -replace 'Chef Development Kit Version: ',''
