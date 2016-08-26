@@ -1,0 +1,25 @@
+driver:
+  name: vagrant
+
+platforms:
+  - name: windows-10
+    transport:
+      name: winrm
+      elevated: true
+  - name: macos-10.11
+
+verifier:
+  name: inspec
+
+suites:
+  - name: bootstrap
+    provisioner:
+      name: shell
+  - name: policyfile
+    provisioner:
+      name: chef_zero
+      wait_for_retry: 300
+      retry_on_exit_code:
+        - 35
+      client_rb:
+        exit_status: :enabled
