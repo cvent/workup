@@ -13,10 +13,6 @@ Write-Host 'Starting workup'
 
 $WORKUP_DIR = Join-Path ${HOME} '.workup'
 
-#$env:Path = [Environment]::GetEnvironmentVariable('Path', [System.EnvironmentVariableTarget]::Machine)
-$env:Path += ';C:\opscode\chefdk\bin'
-$env:Path += ';C:\opscode\chefdk\embedded\bin'
-
 If (Test-Path (Join-Path ${WORKUP_DIR} 'Policyfile.lock.json')) {
   Write-Host -NoNewLine 'Updating lock file... '
   $env:GIT_SSL_NO_VERIFY = $true
