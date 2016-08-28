@@ -1,0 +1,7 @@
+os:
+  - linux
+  - osx
+
+script:
+  - sudo ./bootstrap.sh
+  - chef exec inspec exec test/integration/**/*.rb
