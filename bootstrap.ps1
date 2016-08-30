@@ -35,7 +35,7 @@ $WORKUP_DIR = Join-Path ${HOME} '.workup'
 $WORKUP_BINS = Join-Path ${WORKUP_DIR} 'bin'
 
 $CHEFDK_URL = 'https://omnitruck.chef.io/install.ps1'
-$CHEFDK_VERSION = '0.15.15'
+$CHEFDK_VERSION = '0.17.17'
 
 $wc = New-Object System.Net.WebClient
 

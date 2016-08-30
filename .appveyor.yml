@@ -9,4 +9,4 @@ build_script:
   - ps: ./bootstrap.ps1
 
 test_script:
-  - ps: chef exec inspec exec test/integration/**/*.rb
+  - ps: chef exec inspec exec test/integration/**/*.rb --format documentation
