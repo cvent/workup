@@ -17,7 +17,7 @@ WORKUP_DIR="${HOME}/.workup"
 WORKUP_BINS="${WORKUP_DIR}/bin"
 
 CHEFDK_URL='https://omnitruck.chef.io/install.sh'
-CHEFDK_VERSION='0.15.15'
+CHEFDK_VERSION='0.17.17'
 
 printf "Checking for ChefDK >= v${CHEFDK_VERSION}... "
 if command -v '/usr/local/bin/chef' > /dev/null; then
