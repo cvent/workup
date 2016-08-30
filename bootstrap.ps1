@@ -29,7 +29,7 @@ Function Add-ToPath {
 Write-Host 'Bootstrapping workup'
 
 $WORKUP_BRANCH = 'master' # Useful for testing
-$WORKUP_URL = "https://raw.githubusercontent.com/jonathanmorley/workup/${WORKUP_BRANCH}"
+$WORKUP_URL = "https://raw.githubusercontent.com/cvent/workup/${WORKUP_BRANCH}"
 
 $WORKUP_DIR = Join-Path ${HOME} '.workup'
 $WORKUP_BINS = Join-Path ${WORKUP_DIR} 'bin'
