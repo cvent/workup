@@ -1,5 +1,6 @@
 # Workup
 
+[![Build status](https://ci.appveyor.com/api/projects/status/hu0nygm28cbs040s/branch/master?svg=true)](https://ci.appveyor.com/project/jonathanmorley/workup-pn3lv/branch/master)
 [![Build Status](https://travis-ci.org/cvent/workup.svg?branch=master)](https://travis-ci.org/cvent/workup)
 
 Workup is a workstation provisioning tool that focuses on cross-compatibility
