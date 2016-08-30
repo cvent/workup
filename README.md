@@ -1,7 +1,7 @@
 # Workup
 
-[![Build status](https://ci.appveyor.com/api/projects/status/altgdohi6glq09ij/branch/master?svg=true)](https://ci.appveyor.com/project/jonathanmorley/workup/branch/master)
-[![Build Status](https://travis-ci.org/jonathanmorley/workup.svg?branch=master)](https://travis-ci.org/jonathanmorley/workup)
+[![Build status](https://ci.appveyor.com/api/projects/status/hu0nygm28cbs040s/branch/master?svg=true)](https://ci.appveyor.com/project/jonathanmorley/workup-pn3lv/branch/master)
+[![Build Status](https://travis-ci.org/cvent/workup.svg?branch=master)](https://travis-ci.org/cvent/workup)
 
 Workup is a workstation provisioning tool that focuses on cross-compatibility
 and minimal assumptions about the initial state of the machine.
@@ -17,7 +17,7 @@ Workup uses Chef policyfiles to run cookbooks
 ### UNIX, Linux and MacOS
 On UNIX, Linux and MacOS systems the install script is invoked with:
 
-    curl -L 'https://raw.githubusercontent.com/jonathanmorley/workup/master/bootstrap.sh' | sudo bash
+    curl -L 'https://raw.githubusercontent.com/cvent/workup/master/bootstrap.sh' | sudo bash
 
 ### Microsoft Windows
 On Microsoft Windows systems the install script is invoked using Windows
@@ -25,7 +25,7 @@ PowerShell as an Administrator (The first command should not produce
 any output):
 
     Set-ExecutionPolicy -Force RemoteSigned # Enable remote scripts
-    (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/jonathanmorley/workup/master/bootstrap.ps1') | iex
+    (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/cvent/workup/master/bootstrap.ps1') | iex
 
 
 ## Upgrading workup
