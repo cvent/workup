@@ -6,7 +6,7 @@ If (!([Security.Principal.WindowsPrincipal] `
   Write-Error "You do not have Administrator rights to run this script!`nPlease re-run this script as an Administrator!"
 }
 
-$response = Read-host "Enter Password" -AsSecureString
+$response = Read-host "Enter Password (optional)" -AsSecureString
 $password = [Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($response))
 
 Write-Host 'Starting workup'
