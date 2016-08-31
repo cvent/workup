@@ -4,4 +4,4 @@ os:
 
 script:
   - sudo ./bootstrap.sh
-  - chef exec inspec exec test/integration/**/*.rb
+  - chef exec inspec exec test/integration/**/*.rb --format documentation
