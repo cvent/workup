@@ -17,22 +17,26 @@ If (Test-Path (Join-Path ${WORKUP_DIR} 'Policyfile.lock.json')) {
   Write-Host -NoNewLine 'Updating lock file... '
   $env:GIT_SSL_NO_VERIFY = $true
   chef update "${WORKUP_DIR}/Policyfile.rb" | Out-Null
-  Write-Host -ForegroundColor 'Green' 'OK'
+  If ($LASTEXITCODE -eq 0) { Write-Host -ForegroundColor 'Green' 'OK' }
+  Else { Write-Error 'chef update failure' }
 } Else {
   Write-Host -NoNewLine 'Creating lock file... '
   $env:GIT_SSL_NO_VERIFY = $true
   chef install "${WORKUP_DIR}/Policyfile.rb" | Out-Null
-  Write-Host -ForegroundColor 'Green' 'OK'
+  If ($LASTEXITCODE -eq 0) { Write-Host -ForegroundColor 'Green' 'OK' }
+  Else { Write-Error 'chef install failure' }
 }
 
 Write-Host -NoNewLine 'Creating chef-zero directory... '
 chef export --force (Join-Path ${WORKUP_DIR} 'Policyfile.rb') (Join-Path ${WORKUP_DIR} 'chef-zero') | Out-Null
-Write-Host -ForegroundColor 'Green' 'OK'
+If ($LASTEXITCODE -eq 0) { Write-Host -ForegroundColor 'Green' 'OK' }
+Else { Write-Error 'chef export failure' }
 
 Write-Host 'Running chef-client'
 Try {
   $env:PASSWORD = $password
   chef-client --config (Join-Path ${WORKUP_DIR} 'client.rb')
+  If ($LASTEXITCODE -ne 0) { Write-Error 'chef-client failure' }
 } Finally {
-  Remove-Item env:\password
+  If (Test-Path env:\PASSWORD) { Remove-Item env:\PASSWORD }
 }
