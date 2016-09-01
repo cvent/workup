@@ -37,21 +37,24 @@ def password
   end
 end
 
+def windows?
+  RUBY_PLATFORM =~ /mswin|mingw32|windows/
+end
+
 def sudo_wrap(*cmd, **args)
   env_vars = (args[:env] || []).map { |k, v| "#{k}=#{v}" }
   ['sudo', *env_vars, '-k', '-S', '-p', '', '--', *cmd]
 end
 
 def execute(*cmd, **args)
-  windows = RUBY_PLATFORM =~ /mswin|mingw32|windows/
-  sudo_required = !windows && !ENV['SUDO_USER']
+  sudo_required = !windows? && !ENV['SUDO_USER']
 
   command = sudo_required ? sudo_wrap(*cmd, args) : cmd
 
-  command = command.join(' ') if windows
+  command = command.join(' ') if windows?
 
   shell_out = Mixlib::ShellOut.new(command, cwd: options[:workup_dir], **args)
-  shell_out.user = user if !windows
+  shell_out.user = user unless windows?
   shell_out.input = "#{password}\n" if sudo_required
 
   shell_out.run_command
@@ -69,6 +72,7 @@ end
 
 class Workup < Thor
   class_option :workup_dir, type: :string, default: File.join(Dir.home, '.workup')
+  class_option :dry_run, type: :boolean, default: false
 
   desc 'workup', 'Run workup'
   def workup
@@ -100,8 +104,12 @@ class Workup < Thor
     raise 'Workup directory does not exist' unless File.exist?(options[:workup_dir])
     clientrb_path = File.join(options[:workup_dir], 'client.rb')
 
-    execute('chef-client', '--no-fork', '--config', clientrb_path,
-            env: { PASSWORD: password }, live_stdout: STDOUT, live_stderr: STDERR)
+    client_cmd = ['chef-client', '--no-fork', '--config', clientrb_path]
+    client_cmd << '-A' if windows?
+    client_cmd << '--why-run' if options[:dry_run]
+
+    execute(*client_cmd, env: { PASSWORD: password },
+            live_stdout: STDOUT, live_stderr: STDERR)
   end
 
   default_task :workup
