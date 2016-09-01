@@ -2,6 +2,9 @@ name 'workup'
 
 default_source :community
 
+cookbook 'no_op', github: 'livinginthepast/windows-noop-cookbook'
+
 run_list(
-  # TODO: Fill this with a runlist
+  # This stops the Policyfile from complaining
+  'no_op'
 )
