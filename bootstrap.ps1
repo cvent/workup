@@ -95,6 +95,7 @@ Add-ToPath 'C:\opscode\chefdk\bin'
 
 Write-Host -NoNewLine 'Fetching new workup script... '
 $workup_bin = Join-Path ${WORKUP_BINS} 'workup'
+$wc.DownloadFile("${WORKUP_URL}/workup.rb", "${workup_bin}.rb")
 $wc.DownloadFile("${WORKUP_URL}/workup.ps1", "${workup_bin}.ps1")
 If(!(Test-Path ${workup_bin})) { cmd /c mklink ${workup_bin} "${workup_bin}.ps1" | Out-Null }
 

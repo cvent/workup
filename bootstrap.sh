@@ -96,6 +96,7 @@ curl -Lsko "${WORKUP_DIR}/client.rb" "${WORKUP_URL}/client.rb"
 printf "\033[1;32mOK\033[0m\n"
 
 printf 'Fetching workup... '
+curl -Lsko "${WORKUP_BINS}/workup.rb" "${WORKUP_URL}/workup.rb"
 curl -Lsko "${WORKUP_BINS}/workup" "${WORKUP_URL}/workup.sh"
 chmod +x "${WORKUP_BINS}/workup"
 printf "\033[1;32mOK\033[0m\n"
