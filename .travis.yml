@@ -1,7 +1,5 @@
-os:
-  - linux
-  - osx
-
-script:
-  - sudo ./bootstrap.sh
-  - chef exec inspec exec test/integration/**/*.rb --format documentation
+sudo: false
+language: ruby
+rvm:
+  - 2.2.4
+before_install: gem install bundler -v 1.12.5
