@@ -15,4 +15,5 @@ script:
   - bundle exec rake
   - sudo ./bootstrap.sh
   - chef exec inspec exec test/integration/**/*.rb --format documentation
+  - cat /usr/loca/bin/workup
   - workup --dry-run

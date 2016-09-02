@@ -9,7 +9,7 @@ build_script:
   - ps: ./bootstrap.ps1
 
 test_script:
-  - ps: bundle install
-  - ps: bundle exec rake
+  - ps: chef exec bundle install
+  - ps: chef exec bundle exec rake
   - ps: chef exec inspec exec test/integration/**/*.rb --format documentation
   - ps: workup --dry-run
