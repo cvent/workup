@@ -77,12 +77,12 @@ module Workup
 
       log.info 'Updating lock file... '
       execute('chef', (File.exist?(lock_path) ? 'update' : 'install'), policy_path,
-                              env: { GIT_SSL_NO_VERIFY: options['verify_ssl'] ? '0' : '1' },
-                              cwd: options[:workup_dir])
+              env: { GIT_SSL_NO_VERIFY: options['verify_ssl'] ? '0' : '1' },
+              cwd: options[:workup_dir])
 
       log.info 'Creating chef-zero directory... '
       execute('chef', 'export', '--force', policy_path, chefzero_path,
-                              env: { GIT_SSL_NO_VERIFY: options['verify_ssl'] ? '0' : '1' })
+              env: { GIT_SSL_NO_VERIFY: options['verify_ssl'] ? '0' : '1' })
     end
 
     desc 'chef_client', 'Run chef-client'
