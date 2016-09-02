@@ -81,9 +81,9 @@ fi
 
 printf 'Installing latest workup... '
 if chef gem list -i workup; then
-  chef gem update workup
+  chef gem update workup --bindir '/usr/local/bin'
 else
-  chef gem install workup
+  chef gem install workup --bindir '/usr/local/bin'
 fi
 printf "\033[1;32mOK\033[0m\n"
 
