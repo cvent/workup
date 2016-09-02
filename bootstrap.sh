@@ -79,12 +79,16 @@ if ${install_chef}; then
   printf "\033[1;32mOK\033[0m\n"
 fi
 
-printf 'Creating workup directory... '
-[ -d "${WORKUP_DIR}" ] || mkdir "${WORKUP_DIR}"
+printf 'Installing latest workup... '
+if chef gem list -i workup; then
+  chef gem update workup
+else
+  chef gem install workup
+fi
 printf "\033[1;32mOK\033[0m\n"
 
-printf 'Creating bin directory... '
-[ -d "${WORKUP_BINS}" ] || mkdir "${WORKUP_BINS}"
+printf 'Creating workup directory... '
+[ -d "${WORKUP_DIR}" ] || mkdir "${WORKUP_DIR}"
 printf "\033[1;32mOK\033[0m\n"
 
 printf 'Fetching new Policyfile... '
@@ -93,17 +97,6 @@ printf "\033[1;32mOK\033[0m\n"
 
 printf 'Fetching new client.rb... '
 curl -Lsko "${WORKUP_DIR}/client.rb" "${WORKUP_URL}/client.rb"
-printf "\033[1;32mOK\033[0m\n"
-
-printf 'Fetching workup... '
-curl -Lsko "${WORKUP_BINS}/workup.rb" "${WORKUP_URL}/workup.rb"
-curl -Lsko "${WORKUP_BINS}/workup" "${WORKUP_URL}/workup.sh"
-chmod +x "${WORKUP_BINS}/workup"
-printf "\033[1;32mOK\033[0m\n"
-
-printf 'Installing workup... '
-local_bin='/usr/local/bin/workup'
-[[ -h ${local_bin} ]] || ln -s "${WORKUP_BINS}/workup" "${local_bin}"
 printf "\033[1;32mOK\033[0m\n"
 
 printf 'Checking PATH for /usr/local/bin... '

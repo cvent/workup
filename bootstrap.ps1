@@ -28,11 +28,8 @@ Function Add-ToPath {
 
 Write-Host 'Bootstrapping workup'
 
-$WORKUP_BRANCH = 'master' # Useful for testing
-$WORKUP_URL = "https://raw.githubusercontent.com/cvent/workup/${WORKUP_BRANCH}"
-
+$WORKUP_URL = 'https://raw.githubusercontent.com/cvent/workup/master'
 $WORKUP_DIR = Join-Path ${HOME} '.workup'
-$WORKUP_BINS = Join-Path ${WORKUP_DIR} 'bin'
 
 $CHEFDK_URL = 'https://omnitruck.chef.io/install.ps1'
 $CHEFDK_VERSION = '0.17.17'
@@ -74,17 +71,20 @@ If (${install_chef}) {
 
 Add-ToPath 'C:\opscode\chefdk\bin'
 
-@(${WORKUP_DIR}, ${WORKUP_BINS}) |% {
-  $leaf_name = Split-Path ${_} -Leaf
-  If (Test-Path ${_} -PathType 'Container') {
-    Write-Host "${leaf_name} directory already exists"
-  } ElseIf (Test-Path ${_} -PathType 'Leaf') {
-    Throw "${_} is unexpectedly a file. Please resolve this and try again"
-  } Else {
-    Write-Host -NoNewLine "Creating ${leaf_name} directory... "
-    New-Item -Type Directory ${_} | Out-Null
-    Write-Host -ForegroundColor 'Green' 'OK'
-  }
+Write-Host -NoNewLine 'Installing latest workup... '
+chef gem list -i workup
+If ($LASTEXITCODE -eq 0) { chef gem update workup }
+Else { chef gem install workup }
+Write-Host -ForegroundColor 'Green' 'OK'
+
+If (Test-Path ${WORKUP_DIR} -PathType 'Container') {
+  Write-Host "~/.workup directory already exists"
+} ElseIf (Test-Path ${WORKUP_DIR} -PathType 'Leaf') {
+  Throw "~/.workup is unexpectedly a file. Please resolve this and try again"
+} Else {
+  Write-Host -NoNewLine "Creating ~/.workup directory... "
+  New-Item -Type Directory ${WORKUP_DIR} | Out-Null
+  Write-Host -ForegroundColor 'Green' 'OK'
 }
 
 @('Policyfile.rb', 'client.rb') |% {
@@ -92,15 +92,5 @@ Add-ToPath 'C:\opscode\chefdk\bin'
   $wc.DownloadFile("${WORKUP_URL}/${_}", (Join-Path ${WORKUP_DIR} ${_}))
   Write-Host -ForegroundColor 'Green' 'OK'
 }
-
-Write-Host -NoNewLine 'Fetching new workup script... '
-$workup_bin = Join-Path ${WORKUP_BINS} 'workup'
-$wc.DownloadFile("${WORKUP_URL}/workup.rb", "${workup_bin}.rb")
-$wc.DownloadFile("${WORKUP_URL}/workup.ps1", "${workup_bin}.ps1")
-If(!(Test-Path ${workup_bin})) { cmd /c mklink ${workup_bin} "${workup_bin}.ps1" | Out-Null }
-
-Write-Host -ForegroundColor 'Green' 'OK'
-
-Add-ToPath $WORKUP_BINS
 
 Write-Host 'You are ready to run workup'
