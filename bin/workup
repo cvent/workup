@@ -1,0 +1,22 @@
+#!/usr/bin/env ruby
+
+require 'workup'
+require 'io/console'
+
+def password
+  ENV['PASSWORD'] ||= begin
+    print 'Enter Password: '
+    password = STDIN.noecho(&:gets).chomp
+    puts
+    password
+  end
+end
+
+password
+
+if Process.uid.zero? || Gem.win_platform?
+  Workup::Application.start(ARGV)
+else
+  puts 'Auto-sudoing'
+  exec("sudo PASSWORD=#{password} -k -S -p '' -- #{$PROGRAM_NAME} #{ARGV.join(' ')} <<< #{password}")
+end

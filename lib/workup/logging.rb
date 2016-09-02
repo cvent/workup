@@ -15,9 +15,15 @@
 # limitations under the License.
 #
 
-require 'workup/version'
-require 'workup/application'
-require 'workup/helpers'
+require 'logging'
 
 module Workup
+  class Logging
+    ::Logging.color_scheme('bright', lines: { debug: :green, error: :red })
+
+    ::Logging.appenders.stdout(
+      'stdout',
+      layout: ::Logging.layouts.pattern(pattern: '%m', color_scheme: 'bright')
+    )
+  end
 end

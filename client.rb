@@ -15,4 +15,4 @@ use_policyfile              true
 policy_document_native_api  true
 
 # This plugin causes OS X to hang for 5 minutes before every chef client run
-ohai.disabled_plugins       = [:Passwd]
+ohai.disabled_plugins = [:Passwd]
