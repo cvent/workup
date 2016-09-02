@@ -13,7 +13,7 @@ script:
   - chef exec bundle install
   - chef exec bundle exec rake
   - chef gem build ./workup.gemspec
-  - chef gem install ./workup-0.1.0.gem --bindir '/usr/local/bin'
+  - sudo chef gem install ./workup-0.1.0.gem --bindir '/usr/local/bin'
   - mkdir ~/.workup
   - cp ./files/Policyfile.rb ~/.workup/Policyfile.rb
   - cp ./files/client.rb ~/.workup/client.rb
