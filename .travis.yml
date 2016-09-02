@@ -9,10 +9,14 @@ branches:
     - master
 
 script:
-  - sudo ./bootstrap.sh
-  - chef exec inspec exec test/integration/**/*.rb --format documentation
+  - curl -L https://omnitruck.chef.io/install.sh | sudo bash -s -- -P 'chefdk' -v "0.17.17"
   - chef exec bundle install
   - chef exec bundle exec rake
+  - chef gem build ./workup.gemspec
+  - chef gem install ./workup-0.1.0.gem --bindir '/usr/local/bin'
+  - mkdir -p ~/.workup
+  - cp ./files/Policyfile.rb ~/.workup/Policyfile.rb
+  - cp ./files/client.rb ~/.workup/client.rb
   - cat /usr/local/bin/workup
   - cat /home/travis/.rvm/gems/ruby-2.2.5/bin/workup
   - which workup
