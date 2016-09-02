@@ -7,10 +7,11 @@ init:
 
 build_script:
   - ps: . { (New-Object System.Net.WebClient).DownloadString('https://omnitruck.chef.io/install.ps1') } | iex; install -project 'chefdk' -version '0.17.17'
+  - ps: $env:path += ';C:\opscode\chefdk\bin;'
   - ps: chef exec bundle install
   - ps: chef exec bundle exec rake
   - ps: chef gem build ./workup.gemspec
-  - ps: chef gem install ./workup-0.1.0.gem --bindir '/usr/local/bin'
+  - ps: chef gem install ./workup-0.1.0.gem --bindir 'C:\opscode\chefdk\bin'
   - ps: mkdir ~/.workup
   - ps: cp ./files/Policyfile.rb ~/.workup/Policyfile.rb
   - ps: cp ./files/client.rb ~/.workup/client.rb
