@@ -12,4 +12,4 @@ test_script:
   - ps: chef exec bundle install
   - ps: chef exec bundle exec rake
   - ps: chef exec inspec exec test/integration/**/*.rb --format documentation
-  - ps: workup --dry-run
+  - ps: $env:PASSWORD = ''; workup --dry-run

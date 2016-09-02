@@ -14,4 +14,4 @@ script:
   - chef exec bundle install
   - chef exec bundle exec rake
   - cat /usr/local/bin/workup
-  - workup --dry-run
+  - PASSWORD='' workup --dry-run
