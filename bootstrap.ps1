@@ -89,7 +89,7 @@ If (Test-Path ${WORKUP_DIR} -PathType 'Container') {
 
 @('Policyfile.rb', 'client.rb') |% {
   Write-Host -NoNewLine "Fetching new ${_}... "
-  $wc.DownloadFile("${WORKUP_URL}/${_}", (Join-Path ${WORKUP_DIR} ${_}))
+  $wc.DownloadFile("${WORKUP_URL}/files/${_}", (Join-Path ${WORKUP_DIR} ${_}))
   Write-Host -ForegroundColor 'Green' 'OK'
 }
 

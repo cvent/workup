@@ -92,11 +92,11 @@ printf 'Creating workup directory... '
 printf "\033[1;32mOK\033[0m\n"
 
 printf 'Fetching new Policyfile... '
-curl -Lsko "${WORKUP_DIR}/Policyfile.rb" "${WORKUP_URL}/Policyfile.rb"
+curl -Lsko "${WORKUP_DIR}/Policyfile.rb" "${WORKUP_URL}/files/Policyfile.rb"
 printf "\033[1;32mOK\033[0m\n"
 
 printf 'Fetching new client.rb... '
-curl -Lsko "${WORKUP_DIR}/client.rb" "${WORKUP_URL}/client.rb"
+curl -Lsko "${WORKUP_DIR}/client.rb" "${WORKUP_URL}/files/client.rb"
 printf "\033[1;32mOK\033[0m\n"
 
 printf 'Checking PATH for /usr/local/bin... '
