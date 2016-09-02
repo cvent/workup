@@ -27,5 +27,4 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'thor', '~> 0.19.1'
   spec.add_dependency 'mixlib-shellout', '~> 2.2'
   spec.add_dependency 'logging', '~> 2.1'
-  spec.add_dependency 'chef-dk'
 end
