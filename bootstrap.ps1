@@ -69,7 +69,11 @@ If (${install_chef}) {
   Write-Host -ForegroundColor 'Green' 'OK'
 }
 
+# ChefDK binaries
 Add-ToPath 'C:\opscode\chefdk\bin'
+
+# Chef gem binaries
+Add-ToPath (Join-Path ${ENV:LOCALAPPDATA} 'chefdk\gem\ruby\2.1.0\bin')
 
 Write-Host -NoNewLine 'Installing latest workup... '
 chef gem list -i workup
