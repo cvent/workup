@@ -6,7 +6,7 @@ init:
   - ps: $PSVersionTable
 
 build_script:
-  - ps: . { (New-Object System.Net.WebClient).DownloadString('https://omnitruck.chef.io/install.sh') } | iex; install -project 'chefdk' -version '0.17.17'
+  - ps: . { (New-Object System.Net.WebClient).DownloadString('https://omnitruck.chef.io/install.ps1') } | iex; install -project 'chefdk' -version '0.17.17'
   - ps: chef exec bundle install
   - ps: chef exec bundle exec rake
   - ps: chef gem build ./workup.gemspec
