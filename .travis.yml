@@ -3,17 +3,15 @@ os:
   - osx
 
 sudo: required
-language: ruby
-rvm:
-  - 2.2.4
 
 branches:
   only:
     - master
 
 script:
-  - bundle exec rake
   - sudo ./bootstrap.sh
   - chef exec inspec exec test/integration/**/*.rb --format documentation
-  - cat /usr/loca/bin/workup
+  - chef exec bundle install
+  - chef exec bundle exec rake
+  - cat /usr/local/bin/workup
   - workup --dry-run
