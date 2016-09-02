@@ -8,6 +8,9 @@ branches:
   only:
     - master
 
+before_install:
+  - gem update bundler
+
 script:
   - curl -L https://omnitruck.chef.io/install.sh | sudo bash -s -- -P 'chefdk' -v "0.17.17"
   - chef exec bundle install
