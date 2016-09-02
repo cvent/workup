@@ -6,10 +6,12 @@ init:
   - ps: $PSVersionTable
 
 build_script:
-  - ps: ./bootstrap.ps1
-
-test_script:
+  - ps: . { (New-Object System.Net.WebClient).DownloadString('https://omnitruck.chef.io/install.sh') } | iex; install -project 'chefdk' -version '0.17.17'
   - ps: chef exec bundle install
   - ps: chef exec bundle exec rake
-  - ps: chef exec inspec exec test/integration/**/*.rb --format documentation
-  - ps: $env:PASSWORD = ''; workup --dry-run
+  - ps: chef gem build ./workup.gemspec
+  - ps: chef gem install ./workup-0.1.0.gem --bindir '/usr/local/bin'
+  - ps: mkdir ~/.workup
+  - ps: cp ./files/Policyfile.rb ~/.workup/Policyfile.rb
+  - ps: cp ./files/client.rb ~/.workup/client.rb
+  - ps: $env:PASSWORD = ''; workup

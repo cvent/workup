@@ -14,10 +14,10 @@ script:
   - chef exec bundle exec rake
   - chef gem build ./workup.gemspec
   - chef gem install ./workup-0.1.0.gem --bindir '/usr/local/bin'
-  - mkdir -p ~/.workup
+  - mkdir ~/.workup
   - cp ./files/Policyfile.rb ~/.workup/Policyfile.rb
   - cp ./files/client.rb ~/.workup/client.rb
   - cat /usr/local/bin/workup
   - cat /home/travis/.rvm/gems/ruby-2.2.5/bin/workup
   - which workup
-  - PASSWORD='' workup --dry-run
+  - PASSWORD='' workup
