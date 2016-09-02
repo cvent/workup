@@ -15,3 +15,4 @@ script:
   - bundle exec rake
   - sudo ./bootstrap.sh
   - chef exec inspec exec test/integration/**/*.rb --format documentation
+  - workup --dry-run
