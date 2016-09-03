@@ -6,6 +6,7 @@ require 'workup/version'
 Gem::Specification.new do |spec|
   spec.name          = 'workup'
   spec.version       = Workup::VERSION
+  spec.licenses      = ['Apache-2.0']
   spec.authors       = ['Morley, Jonathan']
   spec.email         = ['JMorley@cvent.com']
 
