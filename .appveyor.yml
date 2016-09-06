@@ -13,4 +13,4 @@ build_script:
   - ps: chef exec bundle exec rake build
   - ps: chef gem install pkg/workup-0.1.0.gem --bindir 'C:\opscode\chefdk\bin'
   - ps: chef exec bundle exec rake files
-  - ps: $env:PASSWORD = ''; workup
+  - ps: '' | workup

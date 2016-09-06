@@ -23,4 +23,4 @@ script:
   - cat /home/travis/.rvm/gems/ruby-2.2.5/bin/workup
   - which workup
   - echo $PATH
-  - PASSWORD='' workup
+  - echo '' | workup
