@@ -18,6 +18,7 @@ script:
   - chef exec bundle exec rake build
   - sudo chef gem install pkg/workup-0.1.0.gem --bindir '/usr/local/bin'
   - chef exec bundle exec rake files
+  - PATH="/usr/local/bin:${PATH}"
   - cat /usr/local/bin/workup
   - cat /home/travis/.rvm/gems/ruby-2.2.5/bin/workup
   - which workup

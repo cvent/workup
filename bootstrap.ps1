@@ -20,7 +20,7 @@ Function Add-ToPath {
   $Paths = $Env:Path -split ';'
   If (!($Paths -contains $Path) -and !($Paths -contains "${Path}/")) {
     $MachinePaths = [Environment]::GetEnvironmentVariable('Path', [System.EnvironmentVariableTarget]::Machine) -split ';'
-    $MachinePaths += $Path
+    $MachinePaths = $Path + $MachinePaths
     [Environment]::SetEnvironmentVariable('Path', ($MachinePaths -join ';'), [System.EnvironmentVariableTarget]::Machine)
     Reset-Path
   }
