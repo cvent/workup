@@ -5,10 +5,14 @@ require 'io/console'
 
 def password
   ENV['PASSWORD'] ||= begin
-    print 'Enter Password: '
-    password = STDIN.noecho(&:gets).chomp
-    puts
-    password
+    if STDIN.tty?
+      print 'Enter Password: '
+      password = STDIN.noecho(&:gets).chomp
+      puts
+      password
+    else
+      STDIN.read.chomp
+    end
   end
 end
 
