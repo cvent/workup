@@ -1,0 +1,32 @@
+#!/bin/sh
+#
+# Perform necessary workup removal steps
+# after package is uninstalled.
+#
+
+PROGNAME=`basename $0`
+
+is_darwin()
+{
+  uname -v | grep "^Darwin" 2>&1 >/dev/null
+}
+
+is_smartos()
+{
+  uname -v | grep "^joyent" 2>&1 >/dev/null
+}
+
+if is_smartos; then
+    PREFIX="/opt/local"
+elif is_darwin; then
+    PREFIX="/usr/local"
+    mkdir -p "$PREFIX/bin"
+else
+    PREFIX="/usr"
+fi
+
+rm -f $PREFIX/bin/workup
+
+echo "workup has been uninstalled!"
+
+exit 0

@@ -15,11 +15,13 @@
 # limitations under the License.
 #
 
-require 'thor'
-require 'mixlib/shellout'
-
 require 'workup/helpers'
 require 'workup/logging'
+
+require 'chef-dk/command/update'
+require 'chef-dk/command/export'
+require 'mixlib/shellout'
+require 'thor'
 
 module Workup
   class Application < Thor
@@ -76,13 +78,16 @@ module Workup
       chefzero_path = File.join(options[:workup_dir], 'chef-zero')
 
       log.info 'Updating lock file... '
-      execute('chef', (File.exist?(lock_path) ? 'update' : 'install'), policy_path,
-              env: { GIT_SSL_NO_VERIFY: options['verify_ssl'] ? '0' : '1' },
-              cwd: options[:workup_dir])
+      Workup::Helpers.silence do
+        ChefDK::Command::Update.new.run([policy_path])
+      end
+      log.debug "OK\n"
 
       log.info 'Creating chef-zero directory... '
-      execute('chef', 'export', '--force', policy_path, chefzero_path,
-              env: { GIT_SSL_NO_VERIFY: options['verify_ssl'] ? '0' : '1' })
+      Workup::Helpers.silence do
+        ChefDK::Command::Export.new.run(['--force', policy_path, chefzero_path])
+      end
+      log.debug "OK\n"
     end
 
     desc 'chef_client', 'Run chef-client'
@@ -90,11 +95,17 @@ module Workup
       raise 'Workup directory does not exist' unless File.exist?(options[:workup_dir])
       clientrb_path = File.join(options[:workup_dir], 'client.rb')
 
-      client_cmd = ['chef-client', '--no-fork', '--config', clientrb_path]
+      chef_client_dir = if Gem.win_platform?
+        'C:/opscode/workup/embedded/bin'
+      else
+        '/opt/workup/embedded/bin'
+      end
+
+      client_cmd = ['./chef-client', '--no-fork', '--config', clientrb_path]
       client_cmd << '-A' if Gem.win_platform?
       client_cmd << '--why-run' if options[:dry_run]
 
-      execute(*client_cmd, live_stdout: STDOUT, live_stderr: STDERR)
+      execute(*client_cmd, live_stdout: STDOUT, live_stderr: STDERR, cwd: chef_client_dir)
     end
 
     default_task :default

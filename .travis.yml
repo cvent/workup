@@ -12,15 +12,6 @@ before_install:
   - gem update bundler
 
 script:
-  - curl -L https://omnitruck.chef.io/install.sh | sudo bash -s -- -P 'chefdk' -v "0.17.17"
-  - chef exec bundle install
-  - chef exec bundle exec rake test
-  - chef exec bundle exec rake build
-  - sudo chef gem install pkg/workup-0.1.0.gem --bindir '/usr/local/bin'
-  - chef exec bundle exec rake files
-  - PATH="/usr/local/bin:${PATH}"
-  - cat /usr/local/bin/workup
-  - cat /home/travis/.rvm/gems/ruby-2.2.5/bin/workup
-  - which workup
-  - echo $PATH
-  - PASSWORD='' workup
+  - pushd omnibus
+  - bundle install
+  - bundle exec omnibus build workup

@@ -1,0 +1,19 @@
+driver:
+  name: vagrant
+
+platforms:
+  - name: windows-10
+    transport:
+      name: winrm
+      elevated: true
+  - name: macosx-10.11
+
+verifier:
+  name: inspec
+  sudo: false
+  shell: zsh
+
+suites:
+  - name: bootstrap
+    provisioner:
+      name: shell

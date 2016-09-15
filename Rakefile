@@ -10,7 +10,7 @@ end
 task test: ['test:lint', 'test:spec']
 
 task :files do
-  FileUtils.cp_r 'files/.', ::File.join(ENV['HOME'], '.workup')
+  FileUtils.cp_r 'files/.', File.join(ENV['HOME'], '.workup')
 end
 
 task default: :test

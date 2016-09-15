@@ -22,6 +22,13 @@ module Workup
         user = ENV['SUDO_USER'] || ENV['USER']
         raise 'You cannot run workup as root directly' if user == 'root'
       end
+
+      def silence
+        $stdout = StringIO.new
+        yield
+      ensure
+        $stdout = STDOUT
+      end
     end
   end
 end

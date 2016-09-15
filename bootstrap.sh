@@ -76,6 +76,7 @@ fi
 if ${install_chef}; then
   printf "Installing ChefDK v${CHEFDK_VERSION}... "
   curl -Ls "${CHEFDK_URL}" | sudo bash -s -- -P 'chefdk' -v "${CHEFDK_VERSION}" > /dev/null
+  eval "$(/usr/local/bin/chef shell-init bash)"
   printf "\033[1;32mOK\033[0m\n"
 fi
 
