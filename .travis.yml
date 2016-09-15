@@ -10,8 +10,7 @@ branches:
 
 before_install:
   - gem update bundler
+  - pushd omnibus
 
 script:
-  - pushd omnibus
-  - bundle install
   - bundle exec omnibus build workup
