@@ -19,4 +19,4 @@ gemfile: omnibus/Gemfile
 
 script:
   - pushd omnibus
-  - bundle exec omnibus build workup
+  - bundle exec sudo omnibus build workup
