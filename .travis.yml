@@ -2,6 +2,10 @@ os:
   - linux
   - osx
 
+language: ruby
+rvm:
+  - 2.3.1
+
 sudo: required
 
 branches:
@@ -10,7 +14,11 @@ branches:
 
 before_install:
   - gem update bundler
+
+install:
   - pushd omnibus
+  - bundle install --jobs=3 --retry=3
 
 script:
+  - pushd omnibus
   - bundle exec omnibus build workup
