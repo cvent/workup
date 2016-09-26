@@ -15,8 +15,10 @@ branches:
 before_install:
   - gem update bundler
 
+install: bundle install --jobs=3 --retry=3 --binstubs
+
 gemfile: omnibus/Gemfile
 
 script:
   - pushd omnibus
-  - sudo bundle exec omnibus build workup
+  - bundle exec sudo ../bin/omnibus build workup
