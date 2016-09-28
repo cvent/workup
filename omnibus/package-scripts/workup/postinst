@@ -36,6 +36,7 @@ fi
 rm -f $PREFIX/bin/workup
 ln -sf $INSTALLER_DIR/bin/workup $PREFIX/bin || error_exit "Cannot link workup to $PREFIX/bin"
 
+
 echo "Thank you for installing workup!"
 
 exit 0

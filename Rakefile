@@ -13,4 +13,9 @@ task :files do
   FileUtils.cp_r 'files/.', File.join(ENV['HOME'], '.workup')
 end
 
+task :package do
+  `rm -rf ./pkg`
+  `vagrant up 
+end
+
 task default: :test

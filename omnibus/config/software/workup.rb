@@ -58,7 +58,5 @@ dependency "bundler"
 dependency "version-manifest"
 
 build do
-  bundle 'install'
-  gem 'build workup'
-  gem 'install *.gem'
+  gem 'install workup'
 end
