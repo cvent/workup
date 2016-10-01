@@ -40,6 +40,7 @@ module Workup
       end
 
       Workup::Helpers.check_user!
+      Workup::Helpers.initialize_files!
 
       super(*args)
     end

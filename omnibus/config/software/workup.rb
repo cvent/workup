@@ -58,5 +58,8 @@ dependency "bundler"
 dependency "version-manifest"
 
 build do
-  gem 'install workup'
+  bundle 'install'
+  bundle 'check'
+  gem 'build workup.gemspec'
+  gem 'install ./workup-0.1.0.gem'
 end
