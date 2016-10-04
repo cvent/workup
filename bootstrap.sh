@@ -19,6 +19,14 @@ WORKUP_BINS="${WORKUP_DIR}/bin"
 CHEFDK_URL='https://omnitruck.chef.io/install.sh'
 CHEFDK_VERSION='0.17.17'
 
+echo_success() {
+  printf "\033[1;32m$1\033[0m\n"
+}
+
+echo_warning() {
+  printf "\033[1;33m$1\033[0m\n"
+}
+
 printf "Checking for ChefDK >= v${CHEFDK_VERSION}... "
 if command -v '/usr/local/bin/chef' > /dev/null; then
   # From https://stackoverflow.com/questions/4023830/bash-how-compare-two-strings-in-version-format
@@ -64,52 +72,52 @@ if command -v '/usr/local/bin/chef' > /dev/null; then
   fi
 
   if ${install_chef}; then
-    printf "\033[1;33mToo old\033[0m\n"
+    echo_warning "Too old"
   else
-    printf "\033[1;32mOK\033[0m\n"
+    echo_success "OK"
   fi
 else
-  printf "\033[1;33mNot found\033[0m\n"
+  echo_warning "Not found"
   install_chef='true'
 fi
 
 if ${install_chef}; then
   printf "Installing ChefDK v${CHEFDK_VERSION}... "
   curl -Ls "${CHEFDK_URL}" | sudo bash -s -- -P 'chefdk' -v "${CHEFDK_VERSION}" > /dev/null
-  printf "\033[1;32mOK\033[0m\n"
+  echo_success "OK"
 fi
 
 printf 'Creating workup directory... '
 [ -d "${WORKUP_DIR}" ] || mkdir "${WORKUP_DIR}"
-printf "\033[1;32mOK\033[0m\n"
+echo_success "OK"
 
 printf 'Creating bin directory... '
 [ -d "${WORKUP_BINS}" ] || mkdir "${WORKUP_BINS}"
-printf "\033[1;32mOK\033[0m\n"
+echo_success "OK"
 
 printf 'Fetching new Policyfile... '
 curl -Lsko "${WORKUP_DIR}/Policyfile.rb" "${WORKUP_URL}/Policyfile.rb"
-printf "\033[1;32mOK\033[0m\n"
+echo_success "OK"
 
 printf 'Fetching new client.rb... '
 curl -Lsko "${WORKUP_DIR}/client.rb" "${WORKUP_URL}/client.rb"
-printf "\033[1;32mOK\033[0m\n"
+echo_success "OK"
 
 printf 'Fetching workup... '
 curl -Lsko "${WORKUP_BINS}/workup" "${WORKUP_URL}/workup.sh"
 chmod +x "${WORKUP_BINS}/workup"
-printf "\033[1;32mOK\033[0m\n"
+echo_success "OK"
 
 printf 'Installing workup... '
 local_bin='/usr/local/bin/workup'
 [[ -h ${local_bin} ]] || ln -s "${WORKUP_BINS}/workup" "${local_bin}"
-printf "\033[1;32mOK\033[0m\n"
+echo_success "OK"
 
 printf 'Checking PATH for /usr/local/bin... '
 local_regex='(^|:)/usr/local/bin/?($|:)'
 if [[ "${PATH}" =~ $local_regex ]]; then
-  printf "\033[1;32mOK\033[0m\n"
+  echo_success "OK"
   echo 'You are ready to run workup'
 else
-  printf "\033[1;33mNot found\033[0m\n"
+  echo_warning "Not found"
 fi
