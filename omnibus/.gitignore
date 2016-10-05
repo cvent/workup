@@ -2,7 +2,7 @@
 .bundle
 .kitchen/
 .kitchen.local.yml
-vendor/bundle
+vendor
 pkg/*
 .vagrant
 bin/*

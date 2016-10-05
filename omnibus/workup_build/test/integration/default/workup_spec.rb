@@ -1,4 +1,9 @@
-describe command('/usr/local/bin/workup') do
+describe file('/usr/local/bin/workup') do
+  it { should exist }
+end
+
+# Waiting on login shell support
+describe command('workup') do
   it { should exist }
 end
 

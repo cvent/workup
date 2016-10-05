@@ -45,6 +45,9 @@ dependency "libiconv"
 dependency "liblzma"
 dependency "zlib"
 
+# For psych
+dependency 'libyaml'
+
 # ruby and bundler and friends
 dependency "ruby"
 dependency "ruby-windows-devkit" if windows?

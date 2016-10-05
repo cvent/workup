@@ -7,3 +7,5 @@ long_description 'Cookbook to build the workup omnibus packages'
 version '0.0.1'
 
 depends 'omnibus'
+depends 'rubyinstaller'
+depends 'git'
