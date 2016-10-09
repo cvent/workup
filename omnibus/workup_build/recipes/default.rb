@@ -7,21 +7,10 @@ if node['os'] == 'windows'
     EOH
   end
 
-  #include_recipe 'git'
-
-  #include_recipe 'rubyinstaller'
-  #gem_package 'bundler'
-
-  #file '/Users/vagrant/load-omnibus-toolchain.bat'
-
   include_recipe 'omnibus'
 
   powershell_script 'copy elsewhere' do
     code 'Copy-Item -Recurse /home/vagrant/workup /Users/vagrant/workup'
-  end
-
-  powershell_script 'install libyaml' do
-    code '/Users/vagrant/load-omnibus-toolchain.ps1; pacman -S --noconfirm libyaml'
   end
 else
   include_recipe 'omnibus'
@@ -32,8 +21,7 @@ omnibus_build 'workup' do
   log_level :internal
 end
 
-workup_build_dir = node['os'] == 'windows' ? '/workup' : '/opt/workup'
-directory workup_build_dir do
+directory node['workup_build']['build_dir'] do
   action :delete
   recursive true
 end

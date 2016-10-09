@@ -9,7 +9,7 @@ driver:
 provisioner:
   name: chef_zero
   require_chef_omnibus: 12.14.89
-  #log_level: debug
+  log_level: debug
 
 verifier:
   name: inspec
@@ -25,9 +25,9 @@ platforms:
         - ["private_network", {ip: "192.168.33.33"}]
       synced_folders:
         - ['..', '/Users/vagrant/workup', ':type => :nfs, :mount_options => ["nolock,vers=3,udp,noatime"]']
-  - name: windows
+  - name: windows-i386
     driver:
-      box: opentable/win-2012r2-standard-amd64-nocm
+      box: mwrock/Windows2016
     attributes:
       omnibus:
         build_user_group: Administrators

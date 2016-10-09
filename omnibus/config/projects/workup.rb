@@ -23,7 +23,5 @@ dependency "workup"
 
 dependency 'shebang-cleanup'
 
-override :ruby, version: "2.2.5"
-
 exclude "**/.git"
 exclude "**/bundler/git"
