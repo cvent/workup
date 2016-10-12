@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 #
 # Copyright 2016 YOUR NAME
 #
@@ -15,14 +16,14 @@
 #
 
 # These options are required for all software definitions
-name "workup"
-default_version "local_source"
+name 'workup'
+default_version 'local_source'
 
 # For the specific super-special version "local_source", build the source from
 # the local git checkout. This is what you'd want to occur by default if you
 # just ran omnibus build locally.
-version("local_source") do
-  source path: File.expand_path("../..", project.files_path),
+version('local_source') do
+  source path: File.expand_path('../..', project.files_path),
          # Since we are using the local repo, we try to not copy any files
          # that are generated in the process of bundle installing omnibus.
          # If the install steps are well-behaved, this should not matter
@@ -30,39 +31,34 @@ version("local_source") do
          # omnibus cache source directory, but we do this regardless
          # to maintain consistency between what a local build sees and
          # what a github based build will see.
-         options: { exclude: [ "omnibus/vendor" ] }
+         options: { exclude: ['omnibus/vendor'] }
 end
 
 # For any version other than "local_source", fetch from github.
-if version != "local_source"
-  source git: "git://github.com/cvent/workup.git"
-end
+source git: 'git://github.com/cvent/workup.git' if version != 'local_source'
 
 # For nokogiri
-dependency "libxml2"
-dependency "libxslt"
-dependency "libiconv"
-dependency "liblzma"
-dependency "zlib"
-
-# For psych
-dependency 'libyaml'
+dependency 'libxml2'
+dependency 'libxslt'
+dependency 'libiconv'
+dependency 'liblzma'
+dependency 'zlib'
 
 # ruby and bundler and friends
-dependency "ruby"
-dependency "ruby-windows-devkit" if windows?
-dependency "rubygems"
-dependency "bundler"
+dependency 'ruby'
+dependency 'ruby-windows-devkit' if windows?
+dependency 'rubygems'
+dependency 'bundler'
 
-#dependency "chef"
-
+# dependency "chef"
 
 # Version manifest file
-dependency "version-manifest"
+dependency 'version-manifest'
 
 build do
-  bundle 'install'
-  bundle 'check'
-  gem 'build workup.gemspec'
-  gem 'install ./workup-0.1.0.gem'
+  command 'cat C:\workup\embedded\bin\gem'
+
+  env = with_standard_compiler_flags(with_embedded_path)
+
+  gem 'install pkg/workup-0.1.0.gem', env: env
 end

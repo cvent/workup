@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 source 'https://supermarket.chef.io'
 
 cookbook 'workup_build', path: 'workup_build'

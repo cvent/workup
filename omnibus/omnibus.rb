@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 #
 # This file is used to configure the workup project. It contains
 # some minimal configuration examples for working with Omnibus. For a full list
@@ -49,5 +50,8 @@
 
 # Windows architecture defaults
 # ------------------------------
-windows_arch   %w{x86 x64}.include?((ENV['OMNIBUS_WINDOWS_ARCH'] || '').downcase) ?
-                 ENV['OMNIBUS_WINDOWS_ARCH'].downcase.to_sym : :x86
+if %w(x86 x64).include?((ENV['OMNIBUS_WINDOWS_ARCH'] || '').downcase)
+  windows_arch ENV['OMNIBUS_WINDOWS_ARCH'].downcase.to_sym
+else
+  windows_arch :x86
+end

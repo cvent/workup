@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 #
 # Copyright:: Copyright (c) 2016 Cvent Inc.
 # License:: Apache License, Version 2.0
@@ -16,5 +17,5 @@
 #
 
 module Workup
-  VERSION = '0.1.0'.freeze
+  VERSION = '0.1.0'
 end

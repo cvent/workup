@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 #
 # Copyright:: Copyright (c) 2016 Cvent Inc.
 # License:: Apache License, Version 2.0
@@ -75,13 +76,10 @@ module Workup
     def chef_zero
       raise 'Workup directory does not exist' unless File.exist?(options[:workup_dir])
       policy_path = File.join(options[:workup_dir], 'Policyfile.rb')
-      lock_path = File.join(options[:workup_dir], 'Policyfile.lock.json')
       chefzero_path = File.join(options[:workup_dir], 'chef-zero')
 
       log.info 'Updating lock file... '
-      Workup::Helpers.silence do
-        ChefDK::Command::Update.new.run([policy_path])
-      end
+      Workup::Helpers.silence { ChefDK::Command::Update.new.run([policy_path]) }
       log.debug "OK\n"
 
       log.info 'Creating chef-zero directory... '
@@ -97,10 +95,10 @@ module Workup
       clientrb_path = File.join(options[:workup_dir], 'client.rb')
 
       chef_client_dir = if Gem.win_platform?
-        'C:/opscode/workup/embedded/bin'
-      else
-        '/opt/workup/embedded/bin'
-      end
+                          'C:/opscode/workup/embedded/bin'
+                        else
+                          '/opt/workup/embedded/bin'
+                        end
 
       client_cmd = ['./chef-client', '--no-fork', '--config', clientrb_path]
       client_cmd << '-A' if Gem.win_platform?

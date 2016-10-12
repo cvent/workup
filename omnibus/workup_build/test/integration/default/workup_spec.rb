@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 describe file('/usr/local/bin/workup') do
   it { should exist }
 end

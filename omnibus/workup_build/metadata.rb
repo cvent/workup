@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 name 'workup_build'
 maintainer 'Morley, Jonathan'
 maintainer_email 'JMorley@cvent.com'
@@ -7,5 +8,3 @@ long_description 'Cookbook to build the workup omnibus packages'
 version '0.0.1'
 
 depends 'omnibus'
-depends 'rubyinstaller'
-depends 'git'

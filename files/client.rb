@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 chef_repo_path              File.join __dir__, 'chef-zero'
 file_cache_path             File.join __dir__, 'local-cache'
 
@@ -6,7 +7,7 @@ local_mode                  true
 chef_zero.enabled           true
 log_level                   :error
 add_formatter               'doc'
-node_name                   (ENV['SUDO_USER'] || ENV['USER'] || ENV['USERNAME']).downcase
+node_name((ENV['SUDO_USER'] || ENV['USER'] || ENV['USERNAME']).downcase)
 
 ## Policyfile settings
 policy_name                 'workup'
