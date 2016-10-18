@@ -60,5 +60,14 @@ build do
 
   env = with_standard_compiler_flags(with_embedded_path)
 
-  gem 'install pkg/workup-0.1.0.gem', env: env
+  gem 'install pkg/workup-0.1.1.gem', env: env
+
+  block do
+    open("#{install_dir}/bin/workup.bat", "w") do |file|
+      file.print <<-EOH
+@ECHO OFF
+"%~dp0\\..\\embedded\\bin\\workup.bat" %*
+EOH
+    end
+  end if windows?
 end

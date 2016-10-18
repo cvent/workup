@@ -13,7 +13,8 @@ homepage 'https://github.com/cvent/workup'
 # and /opt/workup on all other platforms
 install_dir "#{default_root}/#{name}"
 
-build_version Omnibus::BuildVersion.semver
+build_version '0.1.1'
+
 build_iteration 1
 
 # Creates required build directories
@@ -30,5 +31,6 @@ exclude '**/.git'
 exclude '**/bundler/git'
 
 package :msi do
+  fast_msi
   upgrade_code '769d8737-c798-49d1-bab0-0a31da3ee7df'.capitalize
 end

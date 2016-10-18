@@ -16,8 +16,7 @@ Gem::Specification.new do |spec|
   and minimal assumptions about the initial state of the machine.'
   spec.homepage      = 'https://github.com/cvent/workup'
 
-  spec.files         = Dir.glob('{lib,files,exe}/**', File::FNM_DOTMATCH)
-                          .reject { |f| File.directory?(f) }
+  spec.files         = Dir.glob('{lib,files,exe}/**/*', File::FNM_DOTMATCH)
   spec.bindir        = 'exe'
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ['lib']

@@ -32,4 +32,13 @@ when 'darwin'
     command 'installer -pkg $(ls /vagrant/code/workup/omnibus/pkg/*.pkg | tail -n1) -target /'
   end
 when 'windows'
+  execute 'copy pkg back' do
+    command 'robocopy /vagrant/code/workup/omnibus/pkg /Users/vagrant/workup/omnibus/pkg'
+    returns [0, 1, 2, 3]
+  end
+
+  powershell_script 'install workup' do
+    action :run
+    code "cmd /c start '' /wait msiexec /i (ls /vagrant/code/workup/omnibus/pkg/*.msi | select -last 1).FullName /qn"
+  end
 end
