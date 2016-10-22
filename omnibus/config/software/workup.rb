@@ -38,11 +38,11 @@ end
 source git: 'git://github.com/cvent/workup.git' if version != 'local_source'
 
 # For nokogiri
-dependency 'libxml2'
+#dependency 'libxml2'
 dependency 'libxslt'
-dependency 'libiconv'
-dependency 'liblzma'
-dependency 'zlib'
+#dependency 'libiconv'
+#dependency 'liblzma'
+#dependency 'zlib'
 
 # ruby and bundler and friends
 dependency 'ruby'
@@ -50,14 +50,10 @@ dependency 'ruby-windows-devkit' if windows?
 dependency 'rubygems'
 dependency 'bundler'
 
-# dependency "chef"
-
 # Version manifest file
 dependency 'version-manifest'
 
 build do
-  command 'cat C:\workup\embedded\bin\gem'
-
   env = with_standard_compiler_flags(with_embedded_path)
 
   gem 'install pkg/workup-0.1.1.gem', env: env
