@@ -41,7 +41,7 @@ module Workup
       end
 
       Workup::Helpers.check_user!
-      Workup::Helpers.initialize_files!
+
 
       super(*args)
     end
@@ -74,7 +74,10 @@ module Workup
 
     desc 'chef_zero', 'Create the chef-zero directory'
     def chef_zero
-      raise 'Workup directory does not exist' unless File.exist?(options[:workup_dir])
+      unless File.exist?(options[:workup_dir])
+        Workup::Helpers.initialize_files!(options[:workup_dir])
+      end
+
       policy_path = File.join(options[:workup_dir], 'Policyfile.rb')
       chefzero_path = File.join(options[:workup_dir], 'chef-zero')
 
@@ -91,20 +94,20 @@ module Workup
 
     desc 'chef_client', 'Run chef-client'
     def chef_client
-      raise 'Workup directory does not exist' unless File.exist?(options[:workup_dir])
-      clientrb_path = File.join(options[:workup_dir], 'client.rb')
+      unless File.exist?(options[:workup_dir])
+        Workup::Helpers.initialize_files!(options[:workup_dir])
+      end
 
-      chef_client_dir = if Gem.win_platform?
-                          'C:/opscode/workup/embedded/bin'
-                        else
-                          '/opt/workup/embedded/bin'
-                        end
-
-      client_cmd = ['./chef-client', '--no-fork', '--config', clientrb_path]
+      client_cmd = [
+        "#{'/opt' unless Gem.win_platform?}/workup/embedded/bin/chef-client",
+        '--no-fork',
+        '--config',
+        File.join(options[:workup_dir], 'client.rb')
+      ]
       client_cmd << '-A' if Gem.win_platform?
       client_cmd << '--why-run' if options[:dry_run]
 
-      execute(*client_cmd, live_stdout: STDOUT, live_stderr: STDERR, cwd: chef_client_dir)
+      execute(*client_cmd, live_stdout: STDOUT, live_stderr: STDERR)
     end
 
     default_task :default

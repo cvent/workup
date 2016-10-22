@@ -30,7 +30,9 @@ dependency 'shebang-cleanup'
 exclude '**/.git'
 exclude '**/bundler/git'
 
+project_location_dir = name
 package :msi do
-  fast_msi
+  fast_msi false
   upgrade_code '769d8737-c798-49d1-bab0-0a31da3ee7df'.capitalize
+  parameters ProjectLocationDir: project_location_dir
 end

@@ -24,12 +24,11 @@ module Workup
         raise 'You cannot run workup as root directly' if user == 'root'
       end
 
-      def initialize_files!
+      def initialize_files!(workup_dir)
         files_dir = File.join(File.dirname(File.expand_path(__FILE__)), '../../files')
-        user_workup_dir = File.expand_path('~/.workup')
 
-        Dir.mkdir user_workup_dir unless File.directory? user_workup_dir
-        FileUtils.cp_r "#{files_dir}/.", user_workup_dir
+        Dir.mkdir workup_dir unless File.directory? workup_dir
+        FileUtils.cp_r "#{files_dir}/.", workup_dir
       end
 
       def silence

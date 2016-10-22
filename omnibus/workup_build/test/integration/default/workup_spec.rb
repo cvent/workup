@@ -6,17 +6,19 @@ def env(cmd, **options)
   end + [*cmd]).join(' ')
 end
 
-workup_bins = os.family == 'windows' ? 'C:/workup/bin' : '/usr/local/bin'
-workup_bin = File.join(workup_bins, 'workup')
+# Waiting on login shell support for unix
+describe command('workup') do
+  it { should exist }
+end if os.family == 'windows'
+
+workup_bin = case os.family
+             when 'windows' then 'C:/workup/bin/workup.bat'
+             else '/usr/local/bin/workup'
+             end
 
 describe file(workup_bin) do
   it { should exist }
 end
-
-# Waiting on login shell support
-# describe command('workup') do
-#   it { should exist }
-# end
 
 describe command(env(workup_bin, PASSWORD: 'vagrant')) do
   its('exit_status') { should eq 0 }
