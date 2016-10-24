@@ -16,19 +16,14 @@
 # limitations under the License.
 #
 
+require 'mixlib/shellout'
+
 module Workup
   class Helpers
     class << self
-      def check_user!
+      def check_user
         user = ENV['SUDO_USER'] || ENV['USER']
         raise 'You cannot run workup as root directly' if user == 'root'
-      end
-
-      def initialize_files!(workup_dir)
-        files_dir = File.join(File.dirname(File.expand_path(__FILE__)), '../../files')
-
-        Dir.mkdir workup_dir unless File.directory? workup_dir
-        FileUtils.cp_r "#{files_dir}/.", workup_dir
       end
 
       def silence
@@ -36,6 +31,51 @@ module Workup
         yield
       ensure
         $stdout = STDOUT
+      end
+
+      def execute(*cmd, **args)
+        command = Gem.win_platform? ? cmd.join(' ') : cmd
+        Mixlib::ShellOut.new(command, **args).run_command
+      end
+
+      def chef_bin(executable)
+        [
+          "#{'/opt' unless Gem.win_platform?}/workup/embedded/bin/#{executable}",
+          "#{Gem.win_platform? ? '/opscode' : '/opt'}/chefdk/bin/#{executable}",
+          "#{Gem.win_platform? ? '/opscode' : '/opt'}/chef/bin/#{executable}"
+        ].find(-> { raise "#{executable} not found" }) { |path| File.exist? path }
+      end
+
+      def chef_client(client_rb, dry_run = false)
+        cmd = [chef_bin('chef-client'), '--no-fork', '--config', client_rb]
+        cmd << '-A' if Gem.win_platform?
+        cmd << '--why-run' if dry_run
+
+        execute(*cmd, live_stdout: STDOUT, live_stderr: STDERR)
+      end
+
+      def chef_apply(recipe, dry_run = false)
+        cmd = [chef_bin('chef-apply'),
+               '--log_level', 'fatal',
+               '--minimal-ohai',
+               '--execute', recipe]
+        cmd << '--why-run' if dry_run
+
+        execute(*cmd, live_stdout: STDOUT, live_stderr: STDERR)
+      end
+
+      def initialize_files(workup_dir)
+        chef_apply("directory('#{workup_dir}') { recursive true }")
+
+        files_dir = File.join(File.dirname(File.expand_path(__FILE__)), '../../files')
+
+        Dir.glob("#{files_dir}/*")
+           .each do |f|
+             chef_apply %(file '#{File.join(workup_dir, File.basename(f))}' do
+               action :create_if_missing
+               content %q(#{IO.read(f)})
+             end)
+           end
       end
     end
   end

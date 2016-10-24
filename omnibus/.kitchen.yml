@@ -19,7 +19,7 @@ verifier:
 platforms:
   - name: macos
     driver:
-      box: jhcook/macos-sierra
+      box: jhcook/osx-elcapitan-10.11
       network:
         - ["private_network", {ip: "192.168.33.33"}]
       synced_folders:

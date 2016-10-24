@@ -8,103 +8,35 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 
-echo 'Bootstrapping workup'
+echo_success() {
+  printf "\033[1;32m%s\033[0m\n" "$1"
+}
 
-WORKUP_BRANCH='master' # Useful for testing
-WORKUP_URL="https://raw.githubusercontent.com/cvent/workup/${WORKUP_BRANCH}"
+echo_warning() {
+  printf "\033[1;33m%s\033[0m\n" "$1"
+}
 
+echo 'Bootstrapping Workup'
+
+WORKUP_VERSION="0.1.1"
+WORKUP_URL="https://github.com/cvent/workup/releases/download/v${WORKUP_VERSION}/workup.pkg"
 WORKUP_DIR="${HOME}/.workup"
-WORKUP_BINS="${WORKUP_DIR}/bin"
 
-CHEFDK_URL='https://omnitruck.chef.io/install.sh'
-CHEFDK_VERSION='0.17.17'
-
-printf "Checking for ChefDK >= v${CHEFDK_VERSION}... "
-if command -v '/usr/local/bin/chef' > /dev/null; then
-  # From https://stackoverflow.com/questions/4023830/bash-how-compare-two-strings-in-version-format
-  vercomp () {
-    if [[ $1 == $2 ]]
-    then
-        return 0
-    fi
-    local IFS=.
-    local i ver1=($1) ver2=($2)
-    # fill empty fields in ver1 with zeros
-    for ((i=${#ver1[@]}; i<${#ver2[@]}; i++))
-    do
-        ver1[i]=0
-    done
-    for ((i=0; i<${#ver1[@]}; i++))
-    do
-        if [[ -z ${ver2[i]} ]]
-        then
-            # fill empty fields in ver2 with zeros
-            ver2[i]=0
-        fi
-        if ((10#${ver1[i]} > 10#${ver2[i]}))
-        then
-            return 1
-        fi
-        if ((10#${ver1[i]} < 10#${ver2[i]}))
-        then
-            return 2
-        fi
-    done
-    return 0
-  }
-
-  chefdk_version_regex="^Chef Development Kit Version: (.+)$"
-  if [[ "$(/usr/local/bin/chef env -v)" =~ $chefdk_version_regex ]]; then
-    vercomp "${BASH_REMATCH[1]}" "${CHEFDK_VERSION}"
-    if [[ "${?}" == '-1' ]]; then install_chef='true'; else install_chef='false'; fi
-
-    printf "v${BASH_REMATCH[1]} found "
-  else
-    install_chef=true
-  fi
-
-  if ${install_chef}; then
-    printf "\033[1;33mToo old\033[0m\n"
-  else
-    printf "\033[1;32mOK\033[0m\n"
-  fi
-else
-  printf "\033[1;33mNot found\033[0m\n"
-  install_chef='true'
-fi
-
-if ${install_chef}; then
-  printf "Installing ChefDK v${CHEFDK_VERSION}... "
-  curl -Ls "${CHEFDK_URL}" | sudo bash -s -- -P 'chefdk' -v "${CHEFDK_VERSION}" > /dev/null
-  eval "$(/usr/local/bin/chef shell-init bash)"
-  printf "\033[1;32mOK\033[0m\n"
-fi
-
-printf 'Installing latest workup... '
-if chef gem list -i workup; then
-  chef gem update workup --bindir '/usr/local/bin'
-else
-  chef gem install workup --bindir '/usr/local/bin'
-fi
-printf "\033[1;32mOK\033[0m\n"
-
-printf 'Creating workup directory... '
+printf 'Creating ~/.workup directory... '
 [ -d "${WORKUP_DIR}" ] || mkdir "${WORKUP_DIR}"
-printf "\033[1;32mOK\033[0m\n"
+echo_success "OK"
 
-printf 'Fetching new Policyfile... '
-curl -Lsko "${WORKUP_DIR}/Policyfile.rb" "${WORKUP_URL}/files/Policyfile.rb"
-printf "\033[1;32mOK\033[0m\n"
-
-printf 'Fetching new client.rb... '
-curl -Lsko "${WORKUP_DIR}/client.rb" "${WORKUP_URL}/files/client.rb"
-printf "\033[1;32mOK\033[0m\n"
+printf "Installing Workup v%s... " "${WORKUP_VERSION}"
+installer="${WORKUP_DIR}/workup.pkg"
+curl -Ls "${WORKUP_URL}" -o "${installer}"
+/usr/sbin/installer -target / -pkg "${installer}"
+echo_success 'OK'
 
 printf 'Checking PATH for /usr/local/bin... '
 local_regex='(^|:)/usr/local/bin/?($|:)'
 if [[ "${PATH}" =~ $local_regex ]]; then
-  printf "\033[1;32mOK\033[0m\n"
+  echo_success 'OK'
   echo 'You are ready to run workup'
 else
-  printf "\033[1;33mNot found\033[0m\n"
+  echo_warning 'Not found'
 fi

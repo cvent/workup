@@ -21,7 +21,6 @@ require 'workup/logging'
 
 require 'chef-dk/command/update'
 require 'chef-dk/command/export'
-require 'mixlib/shellout'
 require 'thor'
 
 module Workup
@@ -40,43 +39,20 @@ module Workup
         log
       end
 
-      Workup::Helpers.check_user!
-
+      Workup::Helpers.check_user
 
       super(*args)
     end
 
-    no_commands do
-      def execute(*cmd, **args)
-        command = Gem.win_platform? ? cmd.join(' ') : cmd
-
-        shell_out = Mixlib::ShellOut.new(command, **args)
-        shell_out.run_command
-
-        if shell_out.error?
-          log.error "Error\n"
-          log.error shell_out.inspect
-          log.error shell_out.stdout
-          log.error shell_out.stderr
-          exit shell_out.exitstatus
-        else
-          log.debug "OK\n"
-        end
-      end
-    end
-
     desc 'default', 'Default task'
     def default
-      log.info "Starting workup\n"
       chef_zero
-      chef_client
+      workup
     end
 
     desc 'chef_zero', 'Create the chef-zero directory'
     def chef_zero
-      unless File.exist?(options[:workup_dir])
-        Workup::Helpers.initialize_files!(options[:workup_dir])
-      end
+      Workup::Helpers.initialize_files(options[:workup_dir])
 
       policy_path = File.join(options[:workup_dir], 'Policyfile.rb')
       chefzero_path = File.join(options[:workup_dir], 'chef-zero')
@@ -92,22 +68,12 @@ module Workup
       log.debug "OK\n"
     end
 
-    desc 'chef_client', 'Run chef-client'
-    def chef_client
-      unless File.exist?(options[:workup_dir])
-        Workup::Helpers.initialize_files!(options[:workup_dir])
-      end
-
-      client_cmd = [
-        "#{'/opt' unless Gem.win_platform?}/workup/embedded/bin/chef-client",
-        '--no-fork',
-        '--config',
-        File.join(options[:workup_dir], 'client.rb')
-      ]
-      client_cmd << '-A' if Gem.win_platform?
-      client_cmd << '--why-run' if options[:dry_run]
-
-      execute(*client_cmd, live_stdout: STDOUT, live_stderr: STDERR)
+    desc 'workup', 'Run workup'
+    def workup
+      log.info "Starting workup\n"
+      Workup::Helpers.initialize_files(options[:workup_dir])
+      Workup::Helpers.chef_client(File.join(options[:workup_dir], 'client.rb'),
+                                  options[:dry_run])
     end
 
     default_task :default

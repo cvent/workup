@@ -1,2 +1,5 @@
+AllCops:
+  Exclude:
+    - 'omnibus/**/*'
 inherit_from:
   - '.rubocop_todo.yml'
