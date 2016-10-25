@@ -20,7 +20,7 @@ Dir.chdir('omnibus') do
   CLOBBER << '.kitchen'
 end
 
-omnibus_platforms = [:windows, :macos]
+omnibus_platforms = [:macos, :windows]
 
 desc 'Build omnibus packages'
 task omnibus: omnibus_platforms.map { |platform| "omnibus:#{platform}" }

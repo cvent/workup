@@ -56,7 +56,7 @@ dependency 'version-manifest'
 build do
   env = with_standard_compiler_flags(with_embedded_path)
 
-  gem 'install pkg/workup-0.1.1.gem', env: env
+  gem 'install pkg/workup-0.1.2.gem', env: env
 
   block do
     open("#{install_dir}/bin/workup.bat", "w") do |file|
