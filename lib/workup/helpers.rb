@@ -55,11 +55,13 @@ module Workup
       end
 
       def chef_apply(recipe, dry_run = false)
-        cmd = [chef_bin('chef-apply'),
-               '--log_level', 'fatal',
-               '--minimal-ohai',
-               '--execute', recipe]
+        cmd = [chef_bin('chef-apply'), '--log_level', 'fatal', '--minimal-ohai']
         cmd << '--why-run' if dry_run
+        if Gem.win_platform?
+          cmd.concat(['--execute', "\"#{recipe.gsub(/\n/, ';')}\""])
+        else
+          cmd.concat(['--execute', recipe])
+        end
 
         execute(*cmd, live_stdout: STDOUT, live_stderr: STDERR)
       end
@@ -73,7 +75,7 @@ module Workup
            .each do |f|
              chef_apply %(file '#{File.join(workup_dir, File.basename(f))}' do
                action :create_if_missing
-               content %q(#{IO.read(f)})
+               content IO.read('#{f}')
              end)
            end
       end

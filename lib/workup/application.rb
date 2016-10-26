@@ -44,6 +44,19 @@ module Workup
       super(*args)
     end
 
+    no_commands do
+      def chef_lib(description)
+        log.info description
+        return_code = Workup::Helpers.silence { yield }
+        if return_code.zero?
+          log.debug "OK\n"
+        else
+          log.error "Failure\n"
+          exit return_code
+        end
+      end
+    end
+
     desc 'default', 'Default task'
     def default
       chef_zero
@@ -53,19 +66,16 @@ module Workup
     desc 'chef_zero', 'Create the chef-zero directory'
     def chef_zero
       Workup::Helpers.initialize_files(options[:workup_dir])
-
       policy_path = File.join(options[:workup_dir], 'Policyfile.rb')
       chefzero_path = File.join(options[:workup_dir], 'chef-zero')
 
-      log.info 'Updating lock file... '
-      Workup::Helpers.silence { ChefDK::Command::Update.new.run([policy_path]) }
-      log.debug "OK\n"
+      chef_lib('Updating lock file... ') do
+        ChefDK::Command::Update.new.run([policy_path])
+      end
 
-      log.info 'Creating chef-zero directory... '
-      Workup::Helpers.silence do
+      chef_lib('Creating chef-zero directory... ') do
         ChefDK::Command::Export.new.run(['--force', policy_path, chefzero_path])
       end
-      log.debug "OK\n"
     end
 
     desc 'workup', 'Run workup'
