@@ -1,0 +1,23 @@
+driver:
+  name: vagrant
+
+verifier:
+  name: inspec
+  format: documentation
+
+platforms:
+  - name: windows-10
+    driver:
+      box: mwrock/Windows2016
+    transport:
+      name: winrm
+      elevated: true
+  - name: macos-sierra
+    driver:
+      box: jhcook/macos-sierra
+
+suites:
+  - name: default
+    provisioner:
+      name: shell
+      data_path: .

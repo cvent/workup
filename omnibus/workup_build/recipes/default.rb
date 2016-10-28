@@ -1,5 +1,5 @@
-
 # frozen_string_literal: true
+
 powershell_script 'Disable password complexity requirements' do
   code <<-EOH
     secedit /export /cfg $env:temp/export.cfg
@@ -25,11 +25,26 @@ directory node['workup_build']['build_dir'] do
   recursive true
 end
 
+directory '/Users/vagrant/.workup' do
+  action :create
+  recursive true
+end
+
 case node['os']
 when 'darwin'
   execute 'install workup' do
     action :run
     command 'installer -pkg $(ls /vagrant/code/workup/omnibus/pkg/*.pkg | tail -n1) -target /'
+  end
+
+  execute 'create Policyfile_git' do
+    command 'cp /vagrant/code/workup/files/Policyfile.rb /Users/vagrant/.workup/Policyfile_git.rb'
+    returns [0, 1, 2, 3]
+  end
+
+  execute 'make Policyfile use git' do
+    action :run
+    command 'echo "cookbook \'nop\', github: \'sczizzo/Archive\', rel: \'nop-cookbook\'" >> ~/.workup/Policyfile_git.rb'
   end
 when 'windows'
   execute 'copy pkg back' do
@@ -40,5 +55,16 @@ when 'windows'
   powershell_script 'install workup' do
     action :run
     code "cmd /c start '' /wait msiexec /i (ls /vagrant/code/workup/omnibus/pkg/*.msi | select -last 1).FullName /qn"
+  end
+
+  execute 'create Policyfile_git' do
+    command 'robocopy /vagrant/code/workup/files/Policyfile.rb /Users/vagrant/.workup/Policyfile_git.rb'
+    returns [0, 1, 2, 3]
+  end
+
+  powershell_script 'Make Policyfile use git' do
+    code <<-EOH
+    Add-Content '~/.workup/Policyfile_git.rb' "cookbook 'nop', github: 'sczizzo/Archive', rel: 'nop-cookbook'"
+    EOH
   end
 end

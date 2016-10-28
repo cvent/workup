@@ -22,10 +22,12 @@ require 'workup/logging'
 require 'chef-dk/command/update'
 require 'chef-dk/command/export'
 require 'thor'
+require 'pathname'
 
 module Workup
   class Application < Thor
     class_option :workup_dir, type: :string, default: File.join(Dir.home, '.workup')
+    class_option :policyfile, type: :string, default: File.join(Dir.home, '.workup', 'Policyfile.rb')
     class_option :dry_run, type: :boolean, default: false
     class_option :verify_ssl, type: :boolean, default: true
 
@@ -66,15 +68,18 @@ module Workup
     desc 'chef_zero', 'Create the chef-zero directory'
     def chef_zero
       Workup::Helpers.initialize_files(options[:workup_dir])
-      policy_path = File.join(options[:workup_dir], 'Policyfile.rb')
+
+      policyfile = options[:policyfile]
+      policyfile = File.join(Dir.pwd, policyfile) if Pathname.new(policyfile).relative?
+
       chefzero_path = File.join(options[:workup_dir], 'chef-zero')
 
       chef_lib('Updating lock file... ') do
-        ChefDK::Command::Update.new.run([policy_path])
+        ChefDK::Command::Update.new.run([policyfile])
       end
 
       chef_lib('Creating chef-zero directory... ') do
-        ChefDK::Command::Export.new.run(['--force', policy_path, chefzero_path])
+        ChefDK::Command::Export.new.run(['--force', policyfile, chefzero_path])
       end
     end
 

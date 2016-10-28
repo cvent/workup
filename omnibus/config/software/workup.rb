@@ -49,6 +49,7 @@ dependency 'ruby'
 dependency 'ruby-windows-devkit' if windows?
 dependency 'rubygems'
 dependency 'bundler'
+dependency 'git-windows' if windows?
 
 # Version manifest file
 dependency 'version-manifest'
@@ -59,11 +60,13 @@ build do
   gem 'install pkg/workup-0.1.2.gem', env: env
 
   block do
-    open("#{install_dir}/bin/workup.bat", "w") do |file|
-      file.print <<-EOH
-@ECHO OFF
-"%~dp0\\..\\embedded\\bin\\workup.bat" %*
-EOH
+    ['workup', 'git'].each do |cmd|
+      open("#{install_dir}/bin/#{cmd}.bat", "w") do |file|
+        file.print <<-EOH
+  @ECHO OFF
+  "%~dp0\\..\\embedded\\bin\\#{cmd}.bat" %*
+  EOH
+      end
     end
   end if windows?
 end
