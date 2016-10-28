@@ -57,13 +57,9 @@ when 'windows'
     code "cmd /c start '' /wait msiexec /i (ls /vagrant/code/workup/omnibus/pkg/*.msi | select -last 1).FullName /qn"
   end
 
-  execute 'create Policyfile_git' do
-    command 'robocopy /vagrant/code/workup/files/Policyfile.rb /Users/vagrant/.workup/Policyfile_git.rb'
-    returns [0, 1, 2, 3]
-  end
-
-  powershell_script 'Make Policyfile use git' do
+  powershell_script 'Create and modify Policyfile_git' do
     code <<-EOH
+    Copy-Item /vagrant/code/workup/files/Policyfile.rb /Users/vagrant/.workup/Policyfile_git.rb
     Add-Content '~/.workup/Policyfile_git.rb' "cookbook 'nop', github: 'sczizzo/Archive', rel: 'nop-cookbook'"
     EOH
   end
