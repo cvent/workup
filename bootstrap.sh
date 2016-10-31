@@ -45,7 +45,7 @@ else
 fi
 
 # Install workup
-/opt/chefdk/bin/chef gem install /tmp/kitchen/data/pkg/workup-0.1.3.gem -V
+/opt/chefdk/bin/chef gem install /tmp/kitchen/data/pkg/workup-0.1.4.gem -V
 
 # Make a policyfile to test git
 mkdir -p ~/.workup

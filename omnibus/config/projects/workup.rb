@@ -13,7 +13,7 @@ homepage 'https://github.com/cvent/workup'
 # and /opt/workup on all other platforms
 install_dir "#{default_root}/#{name}"
 
-build_version '0.1.3'
+build_version '0.1.4'
 
 build_iteration 1
 

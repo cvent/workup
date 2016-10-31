@@ -22,7 +22,7 @@ echo_error() {
 
 echo 'Bootstrapping Workup'
 
-WORKUP_VERSION="0.1.3"
+WORKUP_VERSION="0.1.4"
 WORKUP_URL="https://github.com/cvent/workup/releases/download/v${WORKUP_VERSION}/workup.pkg"
 WORKUP_DIR="${HOME}/.workup"
 

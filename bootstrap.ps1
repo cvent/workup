@@ -12,7 +12,7 @@ If(!(Test-Path 'C:/opscode/chefdk/bin/chef')) {
 $KITCHEN_DATA = "${env:TEMP}/kitchen/data"
 
 # Install workup
-C:/opscode/chefdk/bin/chef gem install "${KITCHEN_DATA}/pkg/workup-0.1.3.gem"
+C:/opscode/chefdk/bin/chef gem install "${KITCHEN_DATA}/pkg/workup-0.1.4.gem"
 
 # Make a policyfile to test git
 If(!(Test-Path -Path '~/.workup')){ New-Item '~/.workup' -Type Directory }
