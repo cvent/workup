@@ -26,6 +26,7 @@ dependency 'workup'
 override :"ruby-windows-devkit", version: '4.5.2-20111229-1559' if windows? && windows_arch_i386?
 
 dependency 'shebang-cleanup'
+dependency 'openssl-customization'
 
 exclude '**/.git'
 exclude '**/bundler/git'
