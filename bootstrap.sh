@@ -30,43 +30,45 @@ echo_warning() {
 printf "Checking for ChefDK >= v${CHEFDK_VERSION}... "
 if command -v '/usr/local/bin/chef' > /dev/null; then
   # From https://stackoverflow.com/questions/4023830/bash-how-compare-two-strings-in-version-format
-  vercomp () {
-    if [[ $1 == $2 ]]
-    then
-        return 0
-    fi
-    local IFS=.
-    local i ver1=($1) ver2=($2)
-    # fill empty fields in ver1 with zeros
-    for ((i=${#ver1[@]}; i<${#ver2[@]}; i++))
-    do
-        ver1[i]=0
-    done
-    for ((i=0; i<${#ver1[@]}; i++))
-    do
-        if [[ -z ${ver2[i]} ]]
-        then
-            # fill empty fields in ver2 with zeros
-            ver2[i]=0
-        fi
-        if ((10#${ver1[i]} > 10#${ver2[i]}))
-        then
-            return 1
-        fi
-        if ((10#${ver1[i]} < 10#${ver2[i]}))
-        then
-            return 2
-        fi
-    done
-    return 0
-  }
+  #vercomp () {
+  #  if [[ $1 == $2 ]]
+  #  then
+  #      return 0
+  #  fi
+  #  local IFS=.
+  #  local i ver1=($1) ver2=($2)
+  #  # fill empty fields in ver1 with zeros
+  #  for ((i=${#ver1[@]}; i<${#ver2[@]}; i++))
+  #  do
+  #      ver1[i]=0
+  #  done
+  #  for ((i=0; i<${#ver1[@]}; i++))
+  #  do
+  #      if [[ -z ${ver2[i]} ]]
+  #      then
+  #          # fill empty fields in ver2 with zeros
+  #          ver2[i]=0
+  #      fi
+  #      if ((10#${ver1[i]} > 10#${ver2[i]}))
+  #      then
+  #          return 1
+  #      fi
+  #      if ((10#${ver1[i]} < 10#${ver2[i]}))
+  #      then
+  #          return 2
+  #      fi
+  #  done
+  #  return 0
+  #}
 
   chefdk_version_regex="^Chef Development Kit Version: (.+)$"
   if [[ "$(/usr/local/bin/chef env -v)" =~ $chefdk_version_regex ]]; then
-    vercomp "${BASH_REMATCH[1]}" "${CHEFDK_VERSION}"
-    if [[ "${?}" == '-1' ]]; then install_chef='true'; else install_chef='false'; fi
+    #vercomp "${BASH_REMATCH[1]}" "${CHEFDK_VERSION}"
+    #if [[ "${?}" == '-1' ]]; then install_chef='true'; else install_chef='false'; fi
+    # This is just temporary
+    install_chef=true
 
-    printf "v${BASH_REMATCH[1]} found "
+    #printf "v${BASH_REMATCH[1]} found "
   else
     install_chef=true
   fi
