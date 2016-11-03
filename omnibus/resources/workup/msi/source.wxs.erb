@@ -71,13 +71,15 @@
 
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="WINDOWSVOLUME">
-        <Directory Id="PROJECTLOCATION" Name="$(var.ProjectLocationDir)" >
-          <Directory Id="PROJECTLOCATIONBIN" Name="bin" >
-            <Component Id="WorkupPath" Guid="{6AA58B6A-148B-4C4D-8879-A29359AD0BA7}" >
-              <CreateFolder />
-              <Environment Id="WorkupPathEnvironment"
-                           Name="PATH" Action="set" Part="last" System="yes" Value="[PROJECTLOCATIONBIN]" />
-            </Component>
+        <Directory Id="INSTALLLOCATION" Name="cvent">
+          <Directory Id="PROJECTLOCATION" Name="$(var.ProjectLocationDir)">
+            <Directory Id="PROJECTLOCATIONBIN" Name="bin">
+              <Component Id="WorkupPath" Guid="{6AA58B6A-148B-4C4D-8879-A29359AD0BA7}">
+                <CreateFolder />
+                <Environment Id="WorkupPathEnvironment"
+                             Name="PATH" Action="set" Part="last" System="yes" Value="[PROJECTLOCATIONBIN]" />
+              </Component>
+            </Directory>
           </Directory>
         </Directory>
       </Directory>

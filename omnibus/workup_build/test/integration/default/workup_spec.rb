@@ -13,7 +13,7 @@ end if os.family == 'windows'
 
 case os.family
 when 'windows'
- workup_bin = 'C:/workup/bin/workup.bat'
+ workup_bin = 'C:/cvent/workup/bin/workup.bat'
  policyfile_git = '${env:USERPROFILE}/.workup/Policyfile_git.rb'
 else
  workup_bin = '/usr/local/bin/workup'
