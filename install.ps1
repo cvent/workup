@@ -20,6 +20,12 @@ Get-WmiObject `
   Write-Host -ForegroundColor 'Green' 'OK'
 }
 
+If (!(Test-Path ${WORKUP_DIR} -PathType 'Container')) {
+  Write-Host -NoNewLine "Creating ~/.workup directory... "
+  New-Item -Type Directory ${WORKUP_DIR} | Out-Null
+  Write-Host -ForegroundColor 'Green' 'OK'
+}
+
 Write-Host -NoNewLine "Installing Workup v${WORKUP_VERSION}... "
 $installer = Join-Path $WORKUP_DIR 'workup.msi'
 (New-Object System.Net.WebClient).DownloadFile($WORKUP_URL, $installer)
