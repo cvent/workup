@@ -14,16 +14,12 @@ Workup uses Chef Policyfiles to run cookbooks
 
 ## Installation
 
-### As a gem
+### As a package
 
-    chef gem install workup --bindir /usr/local/bin
+#### MacOS
+On MacOS systems the install script is invoked with:
 
-### As a command
-
-#### UNIX, Linux and MacOS
-On UNIX, Linux and MacOS systems the install script is invoked with:
-
-    curl -L 'https://raw.githubusercontent.com/cvent/workup/master/bootstrap.sh' | sudo bash
+    curl -L 'https://raw.githubusercontent.com/cvent/workup/master/install.sh' | sudo bash
 
 #### Microsoft Windows
 On Microsoft Windows systems the install script is invoked using Windows
@@ -31,29 +27,35 @@ PowerShell as an Administrator (The first command should not produce
 any output):
 
     Set-ExecutionPolicy -Force RemoteSigned # Enable remote scripts
-    (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/cvent/workup/master/bootstrap.ps1') | iex
+    (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/cvent/workup/master/install.ps1') | iex
+
+### As a gem
+
+    chef gem install workup
 
 ## Usage
 
 ### Upgrading workup
 
-Re-run the installation script above
+Re-run the install script above
 
 ### Uninstall workup
 
-  * Remove `~/.workup`
-  * `chef gem uninstall workup`
-  * `sudo rm /usr/local/bin/workup` (Non-windows operating systems only)
+#### MacOS
+
+    sudo rm -rf /opt/workup
+    sudo rm -rf ~/.workup
+    sudo rm -f /usr/local/bin/workup
+    sudo pkgutil --forget test.cvent.pkg.workup
 
 ### Converging your workstation
-On Microsoft Windows systems, you may find that your machine restarts during the execution of this command. Please re-issue this command to continue the setup.
 
     workup
 
 ### Customizing workup
 
 You can modify the `~/.workup/Policyfile.rb` to use different chef cookbooks.
-Note, these changes will currently be overwritten if you run the bootstrap script.
+Note, these changes will currently be overwritten if you run the install script.
 
 ## Contributing
 
@@ -61,5 +63,5 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/cvent/
 
 # Thanks
 
-This is based on the [pantry](https://github.com/chef/pantry-chef-repo) project
+This was based on the [pantry](https://github.com/chef/pantry-chef-repo) project
 by Chef.

@@ -31,7 +31,9 @@ WORKUP_DIR="${HOME}/.workup"
 
 for i in {1..3}
 do
-  if [[ ! $(xcode-\select -p 2> /dev/null) ]]; then
+  if [[ $(xcode-\select -p 2> /dev/null) ]]; then
+    break
+  else
     # create the placeholder file that's checked by CLI updates'
     # .dist code in Apple's SUS catalog
     touch /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress
