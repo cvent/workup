@@ -51,7 +51,7 @@ module Workup
         cmd << '-A' if Gem.win_platform?
         cmd << '--why-run' if dry_run
 
-        execute(*cmd, live_stdout: STDOUT, live_stderr: STDERR)
+        execute(*cmd, live_stdout: STDOUT, live_stderr: STDERR, timeout: 6*60*60)
       end
 
       def chef_apply(recipe, dry_run = false)
