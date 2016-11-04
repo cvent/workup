@@ -40,7 +40,7 @@ module Workup
 
       def chef_bin(executable)
         [
-          "#{'/opt' unless Gem.win_platform?}/workup/embedded/bin/#{executable}",
+          "#{Gem.win_platform? ? '/cvent' : '/opt' }/workup/embedded/bin/#{executable}",
           "#{Gem.win_platform? ? '/opscode' : '/opt'}/chefdk/bin/#{executable}",
           "#{Gem.win_platform? ? '/opscode' : '/opt'}/chef/bin/#{executable}"
         ].find(-> { raise "#{executable} not found" }) { |path| File.exist? path }
