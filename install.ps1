@@ -6,37 +6,11 @@ If (!([Security.Principal.WindowsPrincipal] `
   Write-Error "You do not have Administrator rights to run this script!`nPlease re-run this script as an Administrator!"
 }
 
-Function Reset-Path {
-  $MachinePaths = [Environment]::GetEnvironmentVariable('Path', [System.EnvironmentVariableTarget]::Machine) -split ';'
-  $UserPaths = [Environment]::GetEnvironmentVariable('Path', [System.EnvironmentVariableTarget]::User) -split ';'
-  $Env:Path = ($MachinePaths + $UserPaths) -join ';'
-}
-
-Function Add-ToPath {
-  Param([string]$Path)
-  $Path = $Path.TrimEnd('/')
-
-  Reset-Path
-  $Paths = $Env:Path -split ';'
-  If (!($Paths -contains $Path) -and !($Paths -contains "${Path}/")) {
-    $MachinePaths = [Environment]::GetEnvironmentVariable('Path', [System.EnvironmentVariableTarget]::Machine) -split ';'
-    $MachinePaths = $Path + $MachinePaths
-    [Environment]::SetEnvironmentVariable('Path', ($MachinePaths -join ';'), [System.EnvironmentVariableTarget]::Machine)
-    Reset-Path
-  }
-}
-
 Write-Host 'Bootstrapping Workup'
 
 $WORKUP_VERSION = "0.1.5"
 $WORKUP_URL = "https://github.com/cvent/workup/releases/download/v${WORKUP_VERSION}/workup.msi"
 $WORKUP_DIR = Join-Path ${HOME} '.workup'
-
-If (!(Test-Path ${WORKUP_DIR} -PathType 'Container')) {
-  Write-Host -NoNewLine "Creating ~/.workup directory... "
-  New-Item -Type Directory ${WORKUP_DIR} | Out-Null
-  Write-Host -ForegroundColor 'Green' 'OK'
-}
 
 Get-WmiObject `
     -Class Win32_Product `

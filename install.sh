@@ -62,11 +62,6 @@ else
   exit 2
 fi
 
-printf 'Creating ~/.workup directory... '
-if mkdir -p "${WORKUP_DIR}"; then
-  echo_success 'OK'
-fi
-
 printf "Installing Workup v%s... " "${WORKUP_VERSION}"
 installer="${WORKUP_DIR}/workup.pkg"
 curl -Ls "${WORKUP_URL}" -o "${installer}"
