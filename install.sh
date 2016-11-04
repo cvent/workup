@@ -75,7 +75,7 @@ if /usr/sbin/installer -target / -pkg "${installer}" > /dev/null; then
 fi
 
 WORKUP_PATH_DIR='/usr/local/bin'
-printf 'Checking PATH for $s... ' "${WORKUP_PATH_DIR}"
+printf 'Checking PATH for %s... ' "${WORKUP_PATH_DIR}"
 local_regex="(^|:)${WORKUP_PATH_DIR}/?(\$|:)"
 if [[ "${PATH}" =~ $local_regex ]]; then
   echo_success 'OK'
