@@ -4,10 +4,11 @@ rake clobber build
 
 pushd omnibus
 
+rm -rf pkg
 kitchen test macos
 rm -rf .bundle
 rm -rf vendor
-rm -rf Gemfile.lock
+rm -f Gemfile.lock
 kitchen test windows
 
 popd
