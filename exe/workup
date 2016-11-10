@@ -3,6 +3,7 @@
 
 require 'workup'
 require 'io/console'
+require 'shellwords'
 
 def password
   ENV['PASSWORD'] ||= begin
@@ -23,5 +24,5 @@ if Process.uid.zero? || password.empty? || Gem.win_platform?
   Workup::Application.start(ARGV)
 else
   puts 'Auto-sudoing'
-  exec("sudo PASSWORD=#{password} -k -S -p '' -- #{$PROGRAM_NAME} #{ARGV.join(' ')} <<< #{password}")
+  exec("sudo PASSWORD=#{Shellwords.escape(password)} -k -S -p '' -- #{$PROGRAM_NAME} #{ARGV.join(' ')} <<< #{Shellwords.escape(password)}")
 end
