@@ -38,7 +38,6 @@ $installer = Join-Path $WORKUP_DIR 'workup.msi'
 cmd /c start '' /wait msiexec /i $installer /qn
 Write-Host -ForegroundColor 'Green' 'OK'
 
-# Doesnt; work
 Reset-Path
 
 Write-Host 'You are ready to run workup'
