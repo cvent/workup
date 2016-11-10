@@ -40,4 +40,12 @@ Write-Host -ForegroundColor 'Green' 'OK'
 
 Reset-Path
 
+Write-Host -NoNewLine "Checking for workup command... "
+If (Get-Command 'workup' -ErrorAction Ignore) {
+  Write-Host -ForegroundColor 'Green' 'OK'
+} else {
+  Write-Host -ForegroundColor 'Red' 'Not found'
+  Exit 1
+}
+
 Write-Host 'You are ready to run workup'
