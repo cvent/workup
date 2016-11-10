@@ -6,6 +6,12 @@ If (!([Security.Principal.WindowsPrincipal] `
   Write-Error "You do not have Administrator rights to run this script!`nPlease re-run this script as an Administrator!"
 }
 
+Function Reset-Path {
+  $MachinePaths = [Environment]::GetEnvironmentVariable('Path', [System.EnvironmentVariableTarget]::Machine) -split ';'
+  $UserPaths = [Environment]::GetEnvironmentVariable('Path', [System.EnvironmentVariableTarget]::User) -split ';'
+  $Env:Path = ($MachinePaths + $UserPaths) -join ';'
+}
+
 Write-Host 'Bootstrapping Workup'
 
 $WORKUP_VERSION = "0.1.6"
@@ -32,6 +38,7 @@ $installer = Join-Path $WORKUP_DIR 'workup.msi'
 cmd /c start '' /wait msiexec /i $installer /qn
 Write-Host -ForegroundColor 'Green' 'OK'
 
-$env:path = [Environment]::GetEnvironmentVariable('Path')
+# Doesnt; work
+Reset-Path
 
 Write-Host 'You are ready to run workup'
