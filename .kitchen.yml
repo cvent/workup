@@ -1,25 +1,23 @@
 driver:
   name: vagrant
 
+verifier:
+  name: inspec
+  format: documentation
+
 platforms:
   - name: windows-10
+    driver:
+      box: mwrock/Windows2016
     transport:
       name: winrm
       elevated: true
-  - name: macos-10.11
-
-verifier:
-  name: inspec
+  - name: macos-sierra
+    driver:
+      box: jhcook/macos-sierra
 
 suites:
-  - name: bootstrap
+  - name: default
     provisioner:
       name: shell
-  - name: policyfile
-    provisioner:
-      name: chef_zero
-      wait_for_retry: 300
-      retry_on_exit_code:
-        - 35
-      client_rb:
-        exit_status: :enabled
+      data_path: .

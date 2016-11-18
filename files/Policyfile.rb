@@ -1,7 +1,9 @@
+# frozen_string_literal: true
 name 'workup'
 
 default_source :community
 
 run_list(
-  # TODO: Fill this with a runlist
+  # This stops the Policyfile from complaining
+  'nop'
 )

@@ -2,124 +2,52 @@
 
 set -e
 
-# Make sure only root can run our script
-if [[ $EUID -ne 0 ]]; then
-   echo "This script must be run as root" 1>&2
-   exit 1
-fi
-
-echo 'Bootstrapping workup'
-
-WORKUP_BRANCH='master' # Useful for testing
-WORKUP_URL="https://raw.githubusercontent.com/cvent/workup/${WORKUP_BRANCH}"
-
-WORKUP_DIR="${HOME}/.workup"
-WORKUP_BINS="${WORKUP_DIR}/bin"
-
 CHEFDK_URL='https://omnitruck.chef.io/install.sh'
 CHEFDK_VERSION='0.17.17'
 
-echo_success() {
-  printf "\033[1;32m$1\033[0m\n"
-}
+# Install chef
+if ! command -v '/usr/local/bin/chef' > /dev/null; then
+  curl -Ls "${CHEFDK_URL}" | sudo bash -s -- -P 'chefdk' -v "${CHEFDK_VERSION}"
+fi
 
-echo_warning() {
-  printf "\033[1;33m$1\033[0m\n"
-}
+# MacOS Sierra's git does not function out of the box. It requires an xcode install
+# From https://github.com/timsutton/osx-vm-templates/blob/master/scripts/xcode-cli-tools.sh
 
-printf "Checking for ChefDK >= v${CHEFDK_VERSION}... "
-if command -v '/usr/local/bin/chef' > /dev/null; then
-  # From https://stackoverflow.com/questions/4023830/bash-how-compare-two-strings-in-version-format
-  #vercomp () {
-  #  if [[ $1 == $2 ]]
-  #  then
-  #      return 0
-  #  fi
-  #  local IFS=.
-  #  local i ver1=($1) ver2=($2)
-  #  # fill empty fields in ver1 with zeros
-  #  for ((i=${#ver1[@]}; i<${#ver2[@]}; i++))
-  #  do
-  #      ver1[i]=0
-  #  done
-  #  for ((i=0; i<${#ver1[@]}; i++))
-  #  do
-  #      if [[ -z ${ver2[i]} ]]
-  #      then
-  #          # fill empty fields in ver2 with zeros
-  #          ver2[i]=0
-  #      fi
-  #      if ((10#${ver1[i]} > 10#${ver2[i]}))
-  #      then
-  #          return 1
-  #      fi
-  #      if ((10#${ver1[i]} < 10#${ver2[i]}))
-  #      then
-  #          return 2
-  #      fi
-  #  done
-  #  return 0
-  #}
+for i in {1..3}
+do
+  if [[ ! $(xcode-\select -p 2> /dev/null) ]]; then
+    # create the placeholder file that's checked by CLI updates'
+    # .dist code in Apple's SUS catalog
+    touch /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress
+    # find the CLI Tools update
+    OSX_VERSION=$(sw_vers -productVersion)
+    PROD=$(softwareupdate -l |
+      grep "\*.*Command Line.*${OSX_VERSION}" |
+      head -n 1 |
+      awk -F"*" '{print $2}' |
+      sed -e 's/^ *//' |
+      tr -d '\n')
 
-  chefdk_version_regex="^Chef Development Kit Version: (.+)$"
-  if [[ "$(/usr/local/bin/chef env -v)" =~ $chefdk_version_regex ]]; then
-    #vercomp "${BASH_REMATCH[1]}" "${CHEFDK_VERSION}"
-    #if [[ "${?}" == '-1' ]]; then install_chef='true'; else install_chef='false'; fi
-    # This is just temporary
-    install_chef=true
-
-    #printf "v${BASH_REMATCH[1]} found "
-  else
-    install_chef=true
+    if [[ ! -z "${PROD}" ]]; then
+      # install it
+      softwareupdate -i "${PROD}"
+      rm /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress
+      break
+    fi
   fi
+done
 
-  if ${install_chef}; then
-    echo_warning "Too old"
-  else
-    echo_success "OK"
-  fi
+if [[ $(xcode-\select -p 2> /dev/null) ]]; then
+  echo "Xcode installed after $i attempts"
 else
-  echo_warning "Not found"
-  install_chef='true'
+  echo "Xcode not installed after $i attempts"
+  exit 2
 fi
 
-if ${install_chef}; then
-  printf "Installing ChefDK v${CHEFDK_VERSION}... "
-  curl -Ls "${CHEFDK_URL}" | sudo bash -s -- -P 'chefdk' -v "${CHEFDK_VERSION}" > /dev/null
-  echo_success "OK"
-fi
+# Install workup
+/opt/chefdk/bin/chef gem install /tmp/kitchen/data/pkg/workup-0.1.6.gem -V
 
-printf 'Creating workup directory... '
-[ -d "${WORKUP_DIR}" ] || mkdir "${WORKUP_DIR}"
-echo_success "OK"
-
-printf 'Creating bin directory... '
-[ -d "${WORKUP_BINS}" ] || mkdir "${WORKUP_BINS}"
-echo_success "OK"
-
-printf 'Fetching new Policyfile... '
-curl -Lsko "${WORKUP_DIR}/Policyfile.rb" "${WORKUP_URL}/Policyfile.rb"
-echo_success "OK"
-
-printf 'Fetching new client.rb... '
-curl -Lsko "${WORKUP_DIR}/client.rb" "${WORKUP_URL}/client.rb"
-echo_success "OK"
-
-printf 'Fetching workup... '
-curl -Lsko "${WORKUP_BINS}/workup" "${WORKUP_URL}/workup.sh"
-chmod +x "${WORKUP_BINS}/workup"
-echo_success "OK"
-
-printf 'Installing workup... '
-local_bin='/usr/local/bin/workup'
-[[ -h ${local_bin} ]] || ln -s "${WORKUP_BINS}/workup" "${local_bin}"
-echo_success "OK"
-
-printf 'Checking PATH for /usr/local/bin... '
-local_regex='(^|:)/usr/local/bin/?($|:)'
-if [[ "${PATH}" =~ $local_regex ]]; then
-  echo_success "OK"
-  echo 'You are ready to run workup'
-else
-  echo_warning "Not found"
-fi
+# Make a policyfile to test git
+mkdir -p ~/.workup
+cp /tmp/kitchen/data/files/Policyfile.rb ~/.workup/Policyfile_git.rb
+echo "cookbook 'nop', github: 'sczizzo/Archive', rel: 'nop-cookbook'" >> ~/.workup/Policyfile_git.rb

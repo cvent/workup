@@ -10,44 +10,58 @@ All data is stored in `~/.workup`
 
 ## What does it do?
 
-Workup uses Chef policyfiles to run cookbooks
+Workup uses Chef Policyfiles to run cookbooks
 
-## Install
+## Installation
 
-### UNIX, Linux and MacOS
-On UNIX, Linux and MacOS systems the install script is invoked with:
+### As a package
 
-    curl -L 'https://raw.githubusercontent.com/cvent/workup/master/bootstrap.sh' | sudo bash
+#### MacOS
+On MacOS systems the install script is invoked with:
 
-### Microsoft Windows
+    curl -L 'https://raw.githubusercontent.com/cvent/workup/master/install.sh' | sudo bash
+
+#### Microsoft Windows
 On Microsoft Windows systems the install script is invoked using Windows
 PowerShell as an Administrator (The first command should not produce
 any output):
 
     Set-ExecutionPolicy -Force RemoteSigned # Enable remote scripts
-    (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/cvent/workup/master/bootstrap.ps1') | iex
+    (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/cvent/workup/master/install.ps1') | iex
 
+### As a gem
 
-## Upgrading workup
+    chef gem install workup
 
-Re-run the installation script above
+## Usage
 
-## Uninstall workup
+### Upgrading workup
 
-  * Remove `~/.workup`
-  * `sudo rm /usr/local/bin/workup` (Non-windows operating systems only)
+Re-run the install script above
 
-## Converging your workstation
-On Microsoft Windows systems, you may find that your machine restarts during the execution of this command. Please re-issue this command to continue the setup.
+### Uninstall workup
+
+#### MacOS
+
+    sudo rm -rf /opt/workup
+    sudo rm -rf ~/.workup
+    sudo rm -f /usr/local/bin/workup
+    sudo pkgutil --forget test.cvent.pkg.workup
+
+### Converging your workstation
 
     workup
 
-# Customizing workup
+### Customizing workup
 
 You can modify the `~/.workup/Policyfile.rb` to use different chef cookbooks.
-Note, these changes will currently be overwritten if you run the bootstrap script.
+Note, these changes will currently be overwritten if you run the install script.
+
+## Contributing
+
+Bug reports and pull requests are welcome on GitHub at https://github.com/cvent/workup.
 
 # Thanks
 
-This is based on the [pantry](https://github.com/chef/pantry-chef-repo) project
+This was based on the [pantry](https://github.com/chef/pantry-chef-repo) project
 by Chef.
