@@ -20,6 +20,19 @@ echo_error() {
   printf "\031[1;33m%s\033[0m\n" "$1"
 }
 
+is_xcode_installed() {
+  if [[ ! $(xcode-\select -p 2> /dev/null) ]]; then return 1; fi
+
+  OSX_VERSION=$(sw_vers -productVersion)
+  XCODE_PATTERN="Command Line.*${OSX_VERSION}"
+
+  if grep -q "${XCODE_PATTERN}" '/Library/Receipts/InstallHistory.plist'; then
+    return 0
+  else
+    return 2
+  fi
+}
+
 echo 'Bootstrapping Workup'
 
 WORKUP_VERSION="0.1.6"
@@ -28,34 +41,31 @@ WORKUP_DIR="${HOME}/.workup"
 
 # MacOS Sierra's git does not function out of the box. It requires an xcode install
 # From https://github.com/timsutton/osx-vm-templates/blob/master/scripts/xcode-cli-tools.sh
+for i in {1..3}; do
+  if is_xcode_installed; then break; fi
 
-for i in {1..3}
-do
-  if [[ $(xcode-\select -p 2> /dev/null) ]]; then
+  # create the placeholder file that's checked by CLI updates'
+  # .dist code in Apple's SUS catalog
+  touch /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress
+  # find the CLI Tools update
+  OSX_VERSION=$(sw_vers -productVersion)
+  XCODE_PATTERN="Command Line.*${OSX_VERSION}"
+  XCODE_INSTALLER=$(softwareupdate -l |
+    grep "\*.*${XCODE_PATTERN}" |
+    head -n 1 |
+    awk -F"*" '{print $2}' |
+    sed -e 's/^\d*//' |
+    tr -d '\n')
+
+  if [[ ! -z "${XCODE_INSTALLER}" ]]; then
+    # install it
+    softwareupdate -i "${XCODE_INSTALLER}"
+    rm /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress
     break
-  else
-    # create the placeholder file that's checked by CLI updates'
-    # .dist code in Apple's SUS catalog
-    touch /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress
-    # find the CLI Tools update
-    OSX_VERSION=$(sw_vers -productVersion)
-    PROD=$(softwareupdate -l |
-      grep "\*.*Command Line.*${OSX_VERSION}" |
-      head -n 1 |
-      awk -F"*" '{print $2}' |
-      sed -e 's/^ *//' |
-      tr -d '\n')
-
-    if [[ ! -z "${PROD}" ]]; then
-      # install it
-      softwareupdate -i "${PROD}"
-      rm /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress
-      break
-    fi
   fi
 done
 
-if [[ $(xcode-\select -p 2> /dev/null) ]]; then
+if is_xcode_installed; then
   echo "Xcode installed after $i attempts"
 else
   echo "Xcode not installed after $i attempts"
