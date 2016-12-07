@@ -54,7 +54,7 @@ for i in {1..3}; do
     grep "\*.*${XCODE_PATTERN}" |
     head -n 1 |
     awk -F"*" '{print $2}' |
-    sed -e 's/^\d*//' |
+    sed -e 's/^[[:space:]]*//' |
     tr -d '\n')
 
   if [[ ! -z "${XCODE_INSTALLER}" ]]; then

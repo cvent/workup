@@ -25,7 +25,7 @@ do
       grep "\*.*Command Line.*${OSX_VERSION}" |
       head -n 1 |
       awk -F"*" '{print $2}' |
-      sed -e 's/^ *//' |
+      sed -e 's/^[[:space:]]*//' |
       tr -d '\n')
 
     if [[ ! -z "${PROD}" ]]; then
