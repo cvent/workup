@@ -23,7 +23,7 @@ echo_error() {
 is_xcode_installed() {
   if [[ ! $(xcode-\select -p 2> /dev/null) ]]; then return 1; fi
 
-  OSX_VERSION=$(sw_vers -productVersion)
+  OSX_VERSION=$(sw_vers -productVersion | awk -F'.' '{print $1"."$2}')
   XCODE_PATTERN="Command Line.*${OSX_VERSION}"
 
   if grep -q "${XCODE_PATTERN}" '/Library/Receipts/InstallHistory.plist'; then
@@ -48,7 +48,7 @@ for i in {1..3}; do
   # .dist code in Apple's SUS catalog
   touch /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress
   # find the CLI Tools update
-  OSX_VERSION=$(sw_vers -productVersion)
+  OSX_VERSION=$(sw_vers -productVersion | awk -F'.' '{print $1"."$2}')
   XCODE_PATTERN="Command Line.*${OSX_VERSION}"
   XCODE_INSTALLER=$(softwareupdate -l |
     grep "\*.*${XCODE_PATTERN}" |
