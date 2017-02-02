@@ -14,12 +14,6 @@ task :files do
   FileUtils.cp_r 'files/.', File.join(ENV['HOME'], '.workup')
 end
 
-Dir.chdir('omnibus') do
-  Kitchen::RakeTasks.new
-  task 'kitchen:default-windows': 'kitchen:default-windows-i386'
-  CLOBBER << '.kitchen'
-end
-
 omnibus_platforms = [:macos, :windows]
 
 desc 'Build omnibus packages'

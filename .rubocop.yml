@@ -1,5 +1,6 @@
 AllCops:
   Exclude:
     - 'omnibus/**/*'
+    - 'vendor/**/*'
 inherit_from:
   - '.rubocop_todo.yml'
