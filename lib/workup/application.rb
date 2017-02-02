@@ -30,6 +30,7 @@ module Workup
     class_option :policyfile, type: :string, default: File.join(Dir.home, '.workup', 'Policyfile.rb')
     class_option :dry_run, type: :boolean, default: false
     class_option :verify_ssl, type: :boolean, default: true
+    class_option :password, type: :boolean, default: false
 
     attr_reader :log
 
@@ -61,6 +62,7 @@ module Workup
 
     desc 'default', 'Default task'
     def default
+      Workup::Helpers.prompt_for_password if options[:password]
       chef_zero
       workup
     end
@@ -87,6 +89,7 @@ module Workup
     def workup
       log.info "Starting workup\n"
       Workup::Helpers.initialize_files(options[:workup_dir])
+      Workup::Helpers.prompt_for_password if options[:password]
       Workup::Helpers.chef_client(File.join(options[:workup_dir], 'client.rb'),
                                   options[:dry_run])
     end

@@ -5,24 +5,8 @@ require 'workup'
 require 'io/console'
 require 'shellwords'
 
-def password
-  ENV['PASSWORD'] ||= begin
-    if STDIN.tty?
-      print 'Enter Password: '
-      password = STDIN.noecho(&:gets).chomp
-      puts
-      password
-    else
-      STDIN.read.chomp
-    end
-  end
-end
-
-password
-
-if Process.uid.zero? || password.empty? || Gem.win_platform?
+if Process.uid.zero? || Gem.win_platform?
   Workup::Application.start(ARGV)
 else
-  puts 'Auto-sudoing'
-  exec("sudo PASSWORD=#{Shellwords.escape(password)} -k -S -p '' -- #{$PROGRAM_NAME} #{ARGV.join(' ')} <<< #{Shellwords.escape(password)}")
+  STDOUT.puts 'Workup needs to be run as sudo'
 end
