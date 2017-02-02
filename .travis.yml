@@ -1,26 +1,8 @@
-os:
-  - linux
-  - osx
-
-language: ruby
-rvm:
-  - 2.2.3
-
-sudo: required
-
+sudo: false
 branches:
   only:
     - master
-
-before_install:
-  - gem update bundler
-
-install: bundle install --jobs=3 --retry=3 --binstubs
-
-gemfile: omnibus/Gemfile
-
+language: ruby
+cache: bundler
 script:
-  - which ruby -a
-  - ruby --version
-  - pushd omnibus
-  - ./bin/omnibus build workup
+  - bundle exec rake
