@@ -1,7 +1,10 @@
 #!/bin/bash
 
-# Need to remove extra files and build workup gem
-bundle exec rake clobber
+# Lets clean up all the files so we have a fresh repo
+git clean -dfx
+
+# Need to bundle install in the root
+bundle install
 
 # Time to omnibus this
 pushd omnibus
