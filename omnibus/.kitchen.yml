@@ -1,10 +1,9 @@
 driver:
   name: vagrant
+  cache_directory: false
   customize:
     cpus: 2
     memory: 4096
-  synced_folders:
-    - ['..', '/vagrant/code/workup']
 
 provisioner:
   name: chef_zero
@@ -23,7 +22,8 @@ platforms:
       network:
         - ["private_network", {ip: "192.168.33.33"}]
       synced_folders:
-        - ['..', '/vagrant/code/workup', ':type => :nfs, :mount_options => ["nolock,vers=3,udp,noatime"]']
+        - ['..', '/vagrant/code/workup', 'type: :nfs']
+
   - name: windows-i386
     driver:
       box: mwrock/Windows2016
