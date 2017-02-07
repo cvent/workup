@@ -1,5 +1,5 @@
 GIT
-  remote: git://github.com/chef/omnibus-software.git
+  remote: https://github.com/chef/omnibus-software.git
   revision: d042e24fa3053ab926bb6a7c066c80e76ad72c94
   branch: ksubrama/ruby23
   specs:
@@ -8,7 +8,7 @@ GIT
       omnibus (>= 5.5.0)
 
 GIT
-  remote: git://github.com/chef/omnibus.git
+  remote: https://github.com/chef/omnibus.git
   revision: 61b50f5a20f0930ee977e54cabaff8fe02d3b731
   branch: ksubrama/gcc_investigate
   specs:
@@ -99,7 +99,7 @@ GEM
     hashie (3.5.1)
     hitimes (1.2.4)
     httpclient (2.8.3)
-    inspec (1.12.0)
+    inspec (1.13.0)
       faraday (>= 0.9.0)
       hashie (~> 3.4)
       json (>= 1.8, < 3.0)
