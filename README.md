@@ -44,9 +44,10 @@ Re-run the install script above
 #### MacOS
 
     sudo rm -rf /opt/workup
-    sudo rm -rf ~/.workup
     sudo rm -f /usr/local/bin/workup
-    sudo pkgutil --forget test.cvent.pkg.workup
+    sudo pkgutil --forget com.cvent.pkg.workup
+    # And if you want to forget all your system configuration data
+    sudo rm -rf ~/.workup
 
 ### Converging your workstation
 
