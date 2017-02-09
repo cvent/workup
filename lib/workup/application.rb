@@ -17,10 +17,9 @@
 #
 
 require 'workup/helpers'
+require 'workup/runner'
 require 'workup/logging'
 
-require 'chef-dk/command/update'
-require 'chef-dk/command/export'
 require 'thor'
 require 'pathname'
 
@@ -42,58 +41,18 @@ module Workup
         log
       end
 
-      Workup::Helpers.check_user
-
       super(*args)
     end
 
-    no_commands do
-      def chef_lib(description)
-        log.info description
-        return_code = Workup::Helpers.silence { yield }
-        if return_code.zero?
-          log.debug "OK\n"
-        else
-          log.error "Failure\n"
-          exit return_code
-        end
-      end
-    end
-
-    desc 'default', 'Default task'
-    def default
-      Workup::Helpers.prompt_for_password if options[:password]
-      chef_zero
-      workup
-    end
-
-    desc 'chef_zero', 'Create the chef-zero directory'
-    def chef_zero
-      Workup::Helpers.initialize_files(options[:workup_dir])
-
-      policyfile = options[:policyfile]
-      policyfile = File.join(Dir.pwd, policyfile) if Pathname.new(policyfile).relative?
-
-      chefzero_path = File.join(options[:workup_dir], 'chef-zero')
-
-      chef_lib('Updating lock file... ') do
-        ChefDK::Command::Update.new.run([policyfile])
-      end
-
-      chef_lib('Creating chef-zero directory... ') do
-        ChefDK::Command::Export.new.run(['--force', policyfile, chefzero_path])
-      end
-    end
-
-    desc 'workup', 'Run workup'
+    desc 'workup', 'Run Workup'
     def workup
-      log.info "Starting workup\n"
-      Workup::Helpers.initialize_files(options[:workup_dir])
-      Workup::Helpers.prompt_for_password if options[:password]
-      Workup::Helpers.chef_client(File.join(options[:workup_dir], 'client.rb'),
-                                  options[:dry_run])
+      if (ENV['SUDO_USER'] || ENV['USER']) == 'root'
+        raise 'You cannot run workup as root directly'
+      end
+
+      Workup::Runner.new(log, options).run
     end
 
-    default_task :default
+    default_task :workup
   end
 end
