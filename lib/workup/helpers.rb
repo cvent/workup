@@ -26,6 +26,17 @@ module Workup
         raise 'You cannot run workup as root directly' if user == 'root'
       end
 
+      def prompt_for_password
+        ENV['PASSWORD'] ||= begin
+                              if STDIN.tty?
+                                print 'Enter Password: '
+                                password = STDIN.noecho(&:gets).chomp
+                                puts
+                                password
+                              end
+                            end
+      end
+
       def silence
         $stdout = StringIO.new
         yield
