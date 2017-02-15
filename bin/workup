@@ -3,7 +3,6 @@
 
 require 'workup'
 require 'io/console'
-require 'shellwords'
 
 if Process.uid.zero? || Gem.win_platform?
   Workup::Application.start(ARGV)
