@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.name          = 'workup'
   spec.version       = Workup::VERSION
   spec.licenses      = ['Apache-2.0']
-  spec.authors       = ['Morley, Jonathan']
-  spec.email         = ['JMorley@cvent.com']
+  spec.authors       = ['Huynh, Andrew']
+  spec.email         = ['AHuynh@cvent.com']
 
   spec.summary       = 'A workstation provisioner.'
   spec.description   = 'Workup is a workstation provisioning tool that focuses on cross-compatibility
