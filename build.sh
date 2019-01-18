@@ -1,14 +1,19 @@
 #!/bin/bash
 
-rake clobber build
-
+# Time to omnibus this
 pushd omnibus
 
-rm -rf pkg
-kitchen test macos
-rm -rf .bundle
-rm -rf vendor
-rm -f Gemfile.lock
-kitchen test windows
+# install all dependencies for packaging
+bundle install
+
+# Build macos package
+bundle exec kitchen test macos
+
+rm -rf .bundle/ vendor/
+
+# Build windows package
+bundle exec kitchen test windows
 
 popd
+
+echo "Build completed check in ./omnibus/pkg for the packages"

@@ -20,12 +20,12 @@ do
     # .dist code in Apple's SUS catalog
     touch /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress
     # find the CLI Tools update
-    OSX_VERSION=$(sw_vers -productVersion)
+    OSX_VERSION=$(sw_vers -productVersion | awk -F'.' '{print $1"."$2}')
     PROD=$(softwareupdate -l |
       grep "\*.*Command Line.*${OSX_VERSION}" |
       head -n 1 |
       awk -F"*" '{print $2}' |
-      sed -e 's/^ *//' |
+      sed -e 's/^[[:space:]]*//' |
       tr -d '\n')
 
     if [[ ! -z "${PROD}" ]]; then

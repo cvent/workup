@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'workup'
+require 'io/console'
+
+if Process.uid.zero? || Gem.win_platform?
+  Workup::Application.start(ARGV)
+else
+  STDOUT.puts 'Workup needs to be run as sudo'
+end
