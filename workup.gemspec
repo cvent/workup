@@ -1,5 +1,6 @@
 # coding: utf-8
 # frozen_string_literal: true
+
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'workup/version'
@@ -16,9 +17,9 @@ Gem::Specification.new do |spec|
   and minimal assumptions about the initial state of the machine.'
   spec.homepage      = 'https://github.com/cvent/workup'
 
-  spec.files         = %w(Gemfile LICENSE README.md workup.gemspec) + Dir.glob('{bin,files,lib}/**/*', File::FNM_DOTMATCH)
+  spec.files         = %w[Gemfile LICENSE README.md workup.gemspec] + Dir.glob('{bin,files,lib}/**/*', File::FNM_DOTMATCH)
   spec.bindir        = 'bin'
-  spec.executables   = %w(workup)
+  spec.executables   = %w[workup]
   spec.require_paths = ['lib']
 
   spec.add_development_dependency 'bundler', '~> 1.12'

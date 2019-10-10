@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-#
+
 # Copyright:: Copyright (c) 2016 Cvent Inc.
 # License:: Apache License, Version 2.0
 #
