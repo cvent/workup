@@ -48,8 +48,8 @@ for i in {1..3}; do
   # .dist code in Apple's SUS catalog
   touch /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress
   # find the CLI Tools update
-  OSX_VERSION=$(sw_vers -productVersion | awk -F'.' '{print $1"."$2}')
-  XCODE_PATTERN="Command Line.*${OSX_VERSION}"
+  OSX_VERSION=$(sw_vers -productVersion | awk -F'.' '{print $1""$2}')
+  XCODE_PATTERN="com.apple.pkg.CLTools_SDK_macOS${OSX_VERSION}"
   XCODE_INSTALLER=$(softwareupdate -l |
     grep "\*.*${XCODE_PATTERN}" |
     head -n 1 |
