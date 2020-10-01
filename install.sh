@@ -23,8 +23,8 @@ echo_error() {
 is_xcode_installed() {
   if [[ ! $(xcode-\select -p 2> /dev/null) ]]; then return 1; fi
 
-  OSX_VERSION=$(sw_vers -productVersion | awk -F'.' '{print $1"."$2}')
-  XCODE_PATTERN="Command Line.*${OSX_VERSION}"
+  OSX_VERSION=$(sw_vers -productVersion | awk -F'.' '{print $1""$2}')
+  XCODE_PATTERN="com.apple.pkg.CLTools_SDK_macOS${OSX_VERSION}"
 
   if grep -q "${XCODE_PATTERN}" '/Library/Receipts/InstallHistory.plist'; then
     return 0
