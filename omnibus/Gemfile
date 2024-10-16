@@ -9,6 +9,6 @@ gem 'omnibus', git: 'https://github.com/chef/omnibus.git', branch: 'ksubrama/gcc
 gem 'omnibus-software', git: 'https://github.com/chef/omnibus-software.git', branch: 'ksubrama/ruby23'
 
 gem 'test-kitchen', '~> 1.15'
-gem 'kitchen-vagrant', '~> 1.0'
+gem 'kitchen-vagrant', '~> 1.14', '>= 1.14.2'
 gem 'kitchen-inspec'
 gem 'berkshelf'
