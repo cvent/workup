@@ -8,7 +8,7 @@ gem 'omnibus', git: 'https://github.com/chef/omnibus.git', branch: 'ksubrama/gcc
 # software definitions, but you can clone/fork Chef's to get you started.
 gem 'omnibus-software', git: 'https://github.com/chef/omnibus-software.git', branch: 'ksubrama/ruby23'
 
-gem 'test-kitchen', '~> 1.15'
+gem 'test-kitchen', '~> 4.0'
 gem 'kitchen-vagrant', '~> 1.0'
 gem 'kitchen-inspec'
 gem 'berkshelf'
