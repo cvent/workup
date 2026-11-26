@@ -27,7 +27,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rubocop', '~> 0.49.0'
   spec.add_development_dependency 'rspec', '~> 3.0'
 
-  spec.add_dependency 'thor', '~> 0.19.1'
+  spec.add_dependency 'thor', '~> 0.20.0'
   spec.add_dependency 'logging', '~> 2.1'
   spec.add_dependency 'chef-dk', '~> 0.17.17'
   spec.add_dependency 'chef', '< 12.15.19' # chef-config 12.15.19 is not released
